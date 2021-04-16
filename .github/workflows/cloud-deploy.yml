@@ -18,7 +18,7 @@ env:
   ICR_NAMESPACE: ${{ secrets.ICR_NAMESPACE }}
   REGISTRY_HOSTNAME: uk.icr.io
   IMAGE_NAME: jee-api
-  IKS_CLUSTER: kube-c1slse2l0j3p9unra580-jeecluster-default-00000156 # name or id of cluster
+  IKS_CLUSTER: c1slse2l0j3p9unra580 # name or id of cluster
   DEPLOYMENT_NAME: jee-api
   PORT: 3001
 
