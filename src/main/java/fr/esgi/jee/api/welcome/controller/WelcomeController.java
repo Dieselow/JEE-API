@@ -1,6 +1,6 @@
-package fr.esgi.jee.api.controllers;
+package fr.esgi.jee.api.welcome.controller;
 
-import fr.esgi.jee.api.models.Welcome;
+import fr.esgi.jee.api.welcome.model.Welcome;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
