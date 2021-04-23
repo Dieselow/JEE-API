@@ -10,6 +10,10 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
+    /**
+     * Constructor Injection
+     * better than @Autowired
+     */
     public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
