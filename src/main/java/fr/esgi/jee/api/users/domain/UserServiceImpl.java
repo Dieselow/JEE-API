@@ -1,8 +1,4 @@
-package fr.esgi.jee.api.authentication.serivce.impl;
-
-import fr.esgi.jee.api.authentication.model.User;
-import fr.esgi.jee.api.authentication.repository.UserRepository;
-import fr.esgi.jee.api.authentication.serivce.UserService;
+package fr.esgi.jee.api.users.domain;
 import org.springframework.stereotype.Service;
 
 @Service

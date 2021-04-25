@@ -1,6 +1,6 @@
-package fr.esgi.jee.api.authentication.repository;
+package fr.esgi.jee.api.users.domain;
 
-import fr.esgi.jee.api.authentication.model.User;
+import fr.esgi.jee.api.users.domain.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

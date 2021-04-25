@@ -1,7 +1,7 @@
-package fr.esgi.jee.api.authentication.controller;
+package fr.esgi.jee.api.infra.web;
 
-import fr.esgi.jee.api.authentication.model.User;
-import fr.esgi.jee.api.authentication.serivce.UserService;
+import fr.esgi.jee.api.users.domain.User;
+import fr.esgi.jee.api.users.domain.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

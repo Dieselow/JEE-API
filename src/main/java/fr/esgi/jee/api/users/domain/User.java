@@ -1,4 +1,4 @@
-package fr.esgi.jee.api.authentication.model;
+package fr.esgi.jee.api.users.domain;
 
 import lombok.Builder;
 import lombok.Data;
