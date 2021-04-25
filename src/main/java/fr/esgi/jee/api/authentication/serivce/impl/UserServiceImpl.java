@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
                         .lastName(user.getLastName())
                         .email(user.getEmail())
                         .phoneNumber(user.getPhoneNumber())
-                        .birthDate(user.getBirthDate())
+                        .birthDate(null)
                         .createDate(null)
                         .closeDate(null)
                         .lastLoginDate(null)
