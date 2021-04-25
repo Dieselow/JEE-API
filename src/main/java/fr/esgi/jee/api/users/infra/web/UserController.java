@@ -1,4 +1,4 @@
-package fr.esgi.jee.api.infra.web;
+package fr.esgi.jee.api.users.infra.web;
 
 import fr.esgi.jee.api.users.domain.User;
 import fr.esgi.jee.api.users.domain.UserService;

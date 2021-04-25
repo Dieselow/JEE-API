@@ -1,4 +1,5 @@
 package fr.esgi.jee.api.users.domain;
+
 import org.springframework.stereotype.Service;
 
 @Service
