@@ -43,7 +43,6 @@ jobs:
       # Authenticate with AZURE CLOUD CLI
       - name: Authenticate with azure cli
         run: |
-          az login -n ${ACR_REGISTRY_NAME} -u ${ACR_USERNAME} -p ${ACR_SECRET}
           az aks install-cli
 
       # Build the Docker image
