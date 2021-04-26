@@ -13,13 +13,16 @@ on: [push]
 # Environment variables available to all jobs and steps in this workflow
 env:
   GITHUB_SHA: ${{ github.sha }}
-  IBM_CLOUD_API_KEY: ${{ secrets.IBM_CLOUD_API_KEY }}
-  IBM_CLOUD_REGION: eu-gb
-  ICR_NAMESPACE: ${{ secrets.ICR_NAMESPACE }}
-  REGISTRY_HOSTNAME: uk.icr.io
+  REGISTRY_HOSTNAME: .azurecr.io
   IMAGE_NAME: jee-api
-  IKS_CLUSTER: c1tb8mtf01l5hvgjpe60 # name or id of cluster
+  ACR_REGISTRY_NAME: ${{ secrets.ACR_REGISTRY_NAME }}
+  ACR_USERNAME: ${{ secrets.ACR_USERNAME }}
+  ACR_SECRET: ${{ secrets.ACR_SECRET}}
+  AKS_RESOURCE_GROUP: ${{secrets_ACR_RESOURCE_GROUPS }}
+  AKS_CLUSTER_NAME: ${{ secrets.AKS_CLUSTER_NAME}}
   DEPLOYMENT_NAME: jee-api
+  VERSION: v1
+
   PORT: 3001
 
 jobs:
@@ -31,40 +34,32 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      # Download and Install IBM Cloud CLI
-      - name: Install IBM Cloud CLI
+      # Download and Install AZURE CLOUD CLI
+      - name: Install MICROSOFT AZURE CLI
         run: |
-          curl -fsSL https://clis.cloud.ibm.com/install/linux | sh
-          ibmcloud --version
-          ibmcloud config --check-version=false
-          ibmcloud plugin install -f kubernetes-service
-          ibmcloud plugin install -f container-registry
+          curl -fsSL https://aka.ms/InstallAzureCLIDeb | bash
 
-      # Authenticate with IBM Cloud CLI
-      - name: Authenticate with IBM Cloud CLI
+      # Authenticate with AZURE CLOUD CLI
+      - name: Authenticate with azure cli
         run: |
-          ibmcloud login --apikey "${IBM_CLOUD_API_KEY}" -r "${IBM_CLOUD_REGION}" -g Default
-          ibmcloud cr region-set "${IBM_CLOUD_REGION}"
-          ibmcloud cr login
+          az login -n ${ACR_REGISTRY_NAME} -u ${ACR_USERNAME} -p ${ACR_SECRET}
+          az aks install-cli
 
       # Build the Docker image
       - name: Build with Docker
         run: |
-          docker build -t "$REGISTRY_HOSTNAME"/"$ICR_NAMESPACE"/"$IMAGE_NAME":"$GITHUB_SHA" \
-            --build-arg GITHUB_SHA="$GITHUB_SHA" \
-            --build-arg GITHUB_REF="$GITHUB_REF" .
-
-      # Push the image to IBM Container Registry
+          docker build -t "$ACR_REGISTRY_NAME"/"$IMAGE_NAME":"$VERSION"
+      # Push the image to Azure Container Registry (ACR)
       - name: Push the image to ICR
         run: |
-          docker push $REGISTRY_HOSTNAME/$ICR_NAMESPACE/$IMAGE_NAME:$GITHUB_SHA
+          docker push $ACR_REGISTRY_NAME/$IMAGE_NAME:$VERSION
 
       # Deploy the Docker image to the IKS cluster
       - name: Deploy to IKS
         run: |
-          ibmcloud ks cluster config --cluster $IKS_CLUSTER
+          az aks get-credentials --resource-group $AKS_RESOURCE_GROUP --name $AKS_CLUSTER_NAME
           kubectl config current-context
-          kubectl create deployment $DEPLOYMENT_NAME --image=$REGISTRY_HOSTNAME/$ICR_NAMESPACE/$IMAGE_NAME:$GITHUB_SHA --dry-run=client -o yaml > deployment.yaml
+          kubectl create deployment $DEPLOYMENT_NAME --image=$ACR_REGISTRY_NAME/$IMAGE_NAME:$VERSION --dry-run=client -o yaml > deployment.yaml
           kubectl apply -f deployment.yaml
           kubectl rollout status deployment/$DEPLOYMENT_NAME
           kubectl create service loadbalancer $DEPLOYMENT_NAME --tcp=80:$PORT --dry-run=client -o yaml > service.yaml
