@@ -40,10 +40,6 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      # Authenticate with AZURE CLOUD CLI
-      - name: Authenticate with azure cli
-        run: |
-          az aks install-cli
 
       # Build the Docker image
       - name: Build with Docker
