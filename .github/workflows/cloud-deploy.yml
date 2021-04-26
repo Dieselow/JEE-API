@@ -48,6 +48,7 @@ jobs:
       # Push the image to Azure Container Registry (ACR)
       - name: Push the image to ICR
         run: |
+          az acr login -n ${ACR_REGISTRY_NAME} -u ${ACR_USERNAME} -p ${ACR_SECRET}
           docker push $ACR_REGISTRY_NAME/$IMAGE_NAME:$VERSION
 
       # Deploy the Docker image to the IKS cluster
