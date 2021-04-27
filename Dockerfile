@@ -1,7 +1,12 @@
-FROM maven:3.8.1-openjdk-11
-COPY . /app
-WORKDIR /app
-RUN mvn clean
-RUN mvn compile
-RUN mvn package
-CMD java -jar target/*.jar
+FROM maven:3-jdk-11 as BUILD
+
+COPY . /usr/src/app
+RUN mvn --batch-mode -f /usr/src/app/pom.xml clean package
+
+FROM openjdk:11-jre-slim
+ENV PORT 3001
+EXPOSE 3001
+COPY --from=BUILD /usr/src/app/target /opt/target
+WORKDIR /opt/target
+
+CMD ["/bin/bash", "-c", "find -type f -name '*.jar' | xargs java -jar"]
