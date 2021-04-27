@@ -58,5 +58,4 @@ jobs:
           kubectl config current-context
           kubectl create deployment $DEPLOYMENT_NAME --image=$ACR_REGISTRY_NAME/$IMAGE_NAME:$VERSION --dry-run=client -o yaml > deployment.yaml
           kubectl apply -f deployment.yaml
-          kubectl rollout status deployment/$DEPLOYMENT_NAME
-          kubectl get services -o wide
+          kubectl apply -f service.yaml
