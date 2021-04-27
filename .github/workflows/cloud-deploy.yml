@@ -58,4 +58,5 @@ jobs:
           kubectl config current-context
           kubectl create deployment $DEPLOYMENT_NAME --image=$ACR_REGISTRY_NAME/$IMAGE_NAME:$VERSION --dry-run=client -o yaml > deployment.yaml
           kubectl apply -f deployment.yaml
+          kubectl create service loadbalancer $DEPLOYMENT_NAME --tcp=80:$PORT --dry-run=client -o yaml > service.yaml
           kubectl apply -f service.yaml
