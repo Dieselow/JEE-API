@@ -1,14 +1,10 @@
-# This workflow will build a docker container, publish it to IBM Container Registry, and deploy it to IKS when a release is created
-#
-# To configure this workflow:
-#
-# 1. Ensure that your repository contains a Dockerfile
-# 2. Setup secrets in your repository by going to settings: Create ICR_NAMESPACE and IBM_CLOUD_API_KEY
-# 3. Change the values for the IBM_CLOUD_REGION, REGISTRY_HOSTNAME, IMAGE_NAME, IKS_CLUSTER, DEPLOYMENT_NAME, and PORT
+# This workflow will build a docker container, publish it to Azure Container Registry, and deploy it to ACR when a release is created
 
-name: Build and Deploy to IKS
+name: Build and Deploy to Azure
 
-on: [push]
+on:
+  release:
+    types: [published]
 
 # Environment variables available to all jobs and steps in this workflow
 env:
@@ -51,8 +47,8 @@ jobs:
           az acr login -n ${ACR_REGISTRY_NAME} -u ${ACR_USERNAME} -p ${ACR_SECRET}
           docker push $ACR_REGISTRY_NAME/$IMAGE_NAME:$VERSION
 
-      # Deploy the Docker image to the IKS cluster
-      - name: Deploy to IKS
+      # Deploy the Docker image to the ACR cluster
+      - name: Deploy to ACR
         run: |
           az aks get-credentials --resource-group $AKS_RESOURCE_GROUP --name $AKS_CLUSTER_NAME
           kubectl config current-context
