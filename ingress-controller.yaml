@@ -1,0 +1,15 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-service
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+    - host: jee-api.k8s.com
+      http:
+        paths:
+          - path: /api/v1
+            backend:
+              serviceName: jee-api
+              servicePort: 3001
