@@ -31,24 +31,4 @@ public class UserController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-    @GetMapping("/user/{id}")
-    public ResponseEntity<Optional<User>> getUserById(@PathVariable("id") String id) {
-        try {
-            Optional<User> user =  userService.getUserById(id);
-            return new ResponseEntity<>(user, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @PostMapping("/user")
-    public ResponseEntity<User> insertUser(@RequestBody User user) {
-        try {
-            User _user = userService.addUser(user);
-            return new ResponseEntity<>(_user, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
 }
