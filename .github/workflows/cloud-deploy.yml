@@ -3,9 +3,8 @@
 name: Build and Deploy to Azure
 
 on:
-  [push]
-  #release:
-   # types: [published]
+  release:
+    types: [published]
 
 # Environment variables available to all jobs and steps in this workflow
 env:
