@@ -53,8 +53,8 @@ jobs:
         run: |
           az aks get-credentials --resource-group $AKS_RESOURCE_GROUP --name $AKS_CLUSTER_NAME
           kubectl config current-context
-          kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.30.0/deploy/static/mandatory.yaml
-          kubectl apply -f jee-api-deployment.yaml
-          kubectl apply -f jee-api-service.yaml
-          kubectl apply -f ingress-controller.yaml
+          kubectl create deployment $DEPLOYMENT_NAME --image=$ACR_REGISTRY_NAME/$IMAGE_NAME:$VERSION --dry-run=client -o yaml > deployment.yaml
+          kubectl apply -f deployment.yaml
+          kubectl create service loadbalancer $DEPLOYMENT_NAME --tcp=80:$PORT --dry-run=client -o yaml > service.yaml
+          kubectl apply -f service.yaml
 
