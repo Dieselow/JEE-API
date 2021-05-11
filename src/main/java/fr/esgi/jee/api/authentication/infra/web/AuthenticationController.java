@@ -1,6 +1,9 @@
 package fr.esgi.jee.api.authentication.infra.web;
 
+
+import com.google.gson.JsonObject;
 import fr.esgi.jee.api.authentication.login.LoginDTO;
+import fr.esgi.jee.api.authentication.login.LoginResponseDTO;
 import fr.esgi.jee.api.authentication.security.TokenProvider;
 import fr.esgi.jee.api.users.domain.User;
 import fr.esgi.jee.api.users.domain.UserServiceImpl;
@@ -8,13 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -33,7 +30,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody LoginDTO loginDTO) {
+    @ResponseBody
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginDTO loginDTO) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 loginDTO.getEmail(),
                 loginDTO.getPassword());
@@ -43,11 +41,12 @@ public class AuthenticationController {
         String token = tokenProvider.createToken(
                 loginDTO.getEmail(),
                 this.userService.findUserByEmail(loginDTO.getEmail()).getRoles());
-        Map<String, String> result = new HashMap<>();
-        result.put("email", loginDTO.getEmail());
-        result.put("token", token);
 
-        return new ResponseEntity<>(result, HttpStatus.OK);
+
+        LoginResponseDTO response = new LoginResponseDTO();
+        response.setToken(token);
+
+        return new ResponseEntity(response, HttpStatus.OK);
     }
 
     @PostMapping("/register")
