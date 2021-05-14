@@ -11,7 +11,7 @@ on:
 env:
   GITHUB_SHA: ${{ github.sha }}
   REGISTRY_HOSTNAME: .azurecr.io
-  IMAGE_NAME: jee-api
+  IMAGE_NAME: jee-api-spring
   ACR_REGISTRY_NAME: ${{ secrets.ACR_REGISTRY_NAME }}
   ACR_USERNAME: ${{ secrets.ACR_USERNAME }}
   ACR_SECRET: ${{ secrets.ACR_SECRET}}
