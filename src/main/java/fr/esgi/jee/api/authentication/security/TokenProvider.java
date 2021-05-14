@@ -3,6 +3,7 @@ package fr.esgi.jee.api.authentication.security;
 import fr.esgi.jee.api.authentication.login.Role;
 import fr.esgi.jee.api.users.domain.UserServiceImpl;
 import io.jsonwebtoken.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,11 +21,8 @@ public class TokenProvider {
     @Value("${security.token.secret}")
     private String secretKey;
     private final long tokenValidityInMilliseconds = Duration.ofMinutes(600).getSeconds() * 1000;
-    private final UserServiceImpl userService;
-
-    public TokenProvider(UserServiceImpl userService) {
-        this.userService = userService;
-    }
+    @Autowired
+    private UserServiceImpl userService;
 
     public String createToken(String username, Set<Role> set) {
         Claims claims = Jwts.claims().setSubject(username);
