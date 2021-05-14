@@ -40,8 +40,9 @@ jobs:
       # Build the Docker image
       - name: Build with Docker
         run: |
+          ls
           touch src/main/resources/application.prod.properties
-          echo ${SPRING_ENV} > src/main/resources/application.prod.properties
+          echo "$SPRING_ENV" > src/main/resources/application.prod.properties
           docker build -t "$ACR_REGISTRY_NAME"/"$IMAGE_NAME":"$VERSION" .
       # Push the image to Azure Container Registry (ACR)
       - name: Push the image to ICR
