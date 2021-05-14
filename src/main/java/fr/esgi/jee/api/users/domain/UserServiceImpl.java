@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                         .email(user.getEmail())
                         .password(this.bCryptEncoder.encode(user.getPassword()))
                         .phoneNumber(user.getPhoneNumber())
-                        .createDate(LocalDate.now())
+                        .createDate(new Date())
                         .closeDate(null)
                         .roles(new HashSet<>(Arrays.asList(userRole)))
                         .build()
