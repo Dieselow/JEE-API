@@ -40,7 +40,6 @@ jobs:
       # Build the Docker image
       - name: Build with Docker
         run: |
-          ls
           touch src/main/resources/application.prod.properties
           echo "$SPRING_ENV" > src/main/resources/application.prod.properties
           cat src/main/resources/application.prod.properties
