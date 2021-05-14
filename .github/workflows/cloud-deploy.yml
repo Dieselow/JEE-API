@@ -3,9 +3,7 @@
 name: Build and Deploy to Azure
 
 on:
-  release:
-    types: [ published ]
-
+  push
 # Environment variables available to all jobs and steps in this workflow
 env:
   GITHUB_SHA: ${{ github.sha }}
