@@ -4,7 +4,7 @@ name: Build and Deploy to Azure
 
 on:
   release:
-    types: [published]
+    types: [ published ]
 
 # Environment variables available to all jobs and steps in this workflow
 env:
@@ -16,7 +16,7 @@ env:
   ACR_SECRET: ${{ secrets.ACR_SECRET}}
   AKS_RESOURCE_GROUP: ${{ secrets.AKS_RESOURCE_GROUP }}
   AKS_CLUSTER_NAME: ${{ secrets.AKS_CLUSTER_NAME }}
-  MONGODB_SECRET: ${{ secrets.MONGODB_URI }}
+  SPRING_ENV: ${{ secrets.SPRING_ENV}}
   DEPLOYMENT_NAME: jee-api
   VERSION: v1
 
@@ -41,7 +41,9 @@ jobs:
       # Build the Docker image
       - name: Build with Docker
         run: |
-          docker build -t "$ACR_REGISTRY_NAME"/"$IMAGE_NAME":"$VERSION" --build-arg SECRET_KEY=$MONGODB_SECRET .
+          touch .env
+          echo $SPRING_ENV > .env
+          docker build -t "$ACR_REGISTRY_NAME"/"$IMAGE_NAME":"$VERSION" .
       # Push the image to Azure Container Registry (ACR)
       - name: Push the image to ICR
         run: |
