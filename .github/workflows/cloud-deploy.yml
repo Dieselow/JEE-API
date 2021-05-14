@@ -3,9 +3,7 @@
 name: Build and Deploy to Azure
 
 on:
-  release:
-    types: [published]
-
+  push
 # Environment variables available to all jobs and steps in this workflow
 env:
   GITHUB_SHA: ${{ github.sha }}
@@ -16,6 +14,7 @@ env:
   ACR_SECRET: ${{ secrets.ACR_SECRET}}
   AKS_RESOURCE_GROUP: ${{ secrets.AKS_RESOURCE_GROUP }}
   AKS_CLUSTER_NAME: ${{ secrets.AKS_CLUSTER_NAME }}
+  SPRING_ENV: ${{ secrets.SPRING_ENV}}
   DEPLOYMENT_NAME: jee-api
   VERSION: v1
 
@@ -40,6 +39,8 @@ jobs:
       # Build the Docker image
       - name: Build with Docker
         run: |
+          touch .env
+          echo $SPRING_ENV > .env
           docker build -t "$ACR_REGISTRY_NAME"/"$IMAGE_NAME":"$VERSION" .
       # Push the image to Azure Container Registry (ACR)
       - name: Push the image to ICR
@@ -52,7 +53,8 @@ jobs:
         run: |
           az aks get-credentials --resource-group $AKS_RESOURCE_GROUP --name $AKS_CLUSTER_NAME
           kubectl config current-context
-          kubectl apply -f jee-api-deployment.yaml
+          kubectl create deployment $DEPLOYMENT_NAME --image=$ACR_REGISTRY_NAME/$IMAGE_NAME:$VERSION --dry-run=client -o yaml > deployment.yaml
+          kubectl apply -f deployment.yaml
           kubectl create service loadbalancer $DEPLOYMENT_NAME --tcp=80:$PORT --dry-run=client -o yaml > service.yaml
           kubectl apply -f service.yaml
 
