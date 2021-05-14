@@ -31,7 +31,7 @@ public class User {
     private String password;
     private int phoneNumber;
     @Field(value = "create_date")
-    private LocalDate createDate;
+    private Date createDate;
     @Field(value = "close_date")
     private Date closeDate;
     @DBRef
