@@ -19,8 +19,11 @@ import static org.hamcrest.Matchers.hasItems;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class WelcomeControllerTest {
 
-    private String apiPath = "/api/v1";
-    private String apiPort = "3001";
+    @Value("${server.servlet.context-path}")
+    private String apiPath;
+
+    @Value("${server.port}")
+    private String apiPort;
 
     @Test
     public void welcome() {
@@ -32,23 +35,4 @@ public class WelcomeControllerTest {
                 .body("project", is("JEE-API"))
                 .body("members", hasItems("Julien DA CORTE", "Louis DUMONT", "Maxime D'HARBOULLE"));
     }
-
-    @Test
-    public void login() {
-        JSONObject requestBody = new JSONObject();
-        requestBody.put("email", "test@test.com");
-        requestBody.put("password", "test");
-
-        given()
-            .contentType("application/json")
-            .body(requestBody)
-            .post("http://localhost:" + apiPort + apiPath + "/auth/login")
-            .then()
-            .assertThat()
-            .statusCode(200)
-            .body("token", Matchers.notNullValue());
-    }
-
-
-
 }
