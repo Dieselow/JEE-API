@@ -17,7 +17,7 @@ env:
   AKS_CLUSTER_NAME: ${{ secrets.AKS_CLUSTER_NAME }}
   SPRING_ENV: ${{ secrets.SPRING_ENV}}
   DEPLOYMENT_NAME: jee-api
-  VERSION: v1
+  VERSION: v2
 
   PORT: 3001
 
