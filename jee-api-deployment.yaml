@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jee-api
+  labels:
+    app: jee-api
+    group: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: jee-api
+  template:
+    metadata:
+      labels:
+        app: jee-api
+        group: backend
+    spec:
+      containers:
+        - name: jee-api
+          image: jeeapi.azurecr.io/jee-api:v1
+          ports:
+            - containerPort: 3001
+          resources: {}
+status: {}

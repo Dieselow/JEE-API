@@ -1,4 +1,4 @@
-package fr.esgi.jee.api.models;
+package fr.esgi.jee.api.welcome.model;
 
 import lombok.Builder;
 import lombok.Data;

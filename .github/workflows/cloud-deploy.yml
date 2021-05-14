@@ -1,0 +1,61 @@
+# This workflow will build a docker container, publish it to Azure Container Registry, and deploy it to ACR when a release is created
+
+name: Build and Deploy to Azure
+
+on:
+  release:
+    types: [ published ]
+
+# Environment variables available to all jobs and steps in this workflow
+env:
+  GITHUB_SHA: ${{ github.sha }}
+  REGISTRY_HOSTNAME: .azurecr.io
+  IMAGE_NAME: jee-api
+  ACR_REGISTRY_NAME: ${{ secrets.ACR_REGISTRY_NAME }}
+  ACR_USERNAME: ${{ secrets.ACR_USERNAME }}
+  ACR_SECRET: ${{ secrets.ACR_SECRET}}
+  AKS_RESOURCE_GROUP: ${{ secrets.AKS_RESOURCE_GROUP }}
+  AKS_CLUSTER_NAME: ${{ secrets.AKS_CLUSTER_NAME }}
+  SPRING_ENV: ${{ secrets.SPRING_ENV}}
+  DEPLOYMENT_NAME: jee-api
+  VERSION: v1
+
+  PORT: 3001
+
+jobs:
+  setup-build-publish-deploy:
+    name: Setup, Build, Publish, and Deploy
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # Download and Install AZURE CLOUD CLI
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+
+      # Build the Docker image
+      - name: Build with Docker
+        run: |
+          touch .env
+          echo $SPRING_ENV > .env
+          docker build -t "$ACR_REGISTRY_NAME"/"$IMAGE_NAME":"$VERSION" .
+      # Push the image to Azure Container Registry (ACR)
+      - name: Push the image to ICR
+        run: |
+          az acr login -n ${ACR_REGISTRY_NAME} -u ${ACR_USERNAME} -p ${ACR_SECRET}
+          docker push $ACR_REGISTRY_NAME/$IMAGE_NAME:$VERSION
+
+      # Deploy the Docker image to the ACR cluster
+      - name: Deploy to ACR
+        run: |
+          az aks get-credentials --resource-group $AKS_RESOURCE_GROUP --name $AKS_CLUSTER_NAME
+          kubectl config current-context
+          kubectl apply -f jee-api-deployment.yaml
+          kubectl create service loadbalancer $DEPLOYMENT_NAME --tcp=80:$PORT --dry-run=client -o yaml > service.yaml
+          kubectl apply -f service.yaml
+
