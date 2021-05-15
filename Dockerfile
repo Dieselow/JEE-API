@@ -8,4 +8,4 @@ EXPOSE 3001
 COPY --from=BUILD /usr/src/app/target /opt/target
 WORKDIR /opt/target
 
-CMD ["/bin/bash", "-c", "find -type f -name '*.jar' | xargs java -jar -Djdk.tls.client.protocols=TLSv1.2"]
+CMD ["/bin/bash", "-c", "find -type f -name '*.jar' | xargs java -Djdk.tls.client.protocols=TLSv1.2 -jar"]
