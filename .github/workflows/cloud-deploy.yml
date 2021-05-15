@@ -41,18 +41,18 @@ jobs:
       - name: Build with Docker
         run: |
           docker login ${DOCKER_REGISTRY} -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
-          docker build -t "$DOCKER_USERNAME"/"$IMAGE_NAME":"$VERSION" .
+          docker build -t "$DOCKER_USERNAME"/"$IMAGE_NAME" .
       # Push the image to Azure Container Registry (ACR)
       - name: Push the image to ICR
         run: |
-          docker push $DOCKER_USERNAME/$IMAGE_NAME:$VERSION
+          docker push $DOCKER_USERNAME/$IMAGE_NAME
 
       # Deploy the Docker image to the ACR cluster
       - name: Deploy to ACR
         run: |
           az aks get-credentials --resource-group $AKS_RESOURCE_GROUP --name $AKS_CLUSTER_NAME
           kubectl config current-context
-          kubectl create deployment $DEPLOYMENT_NAME --image=$DOCKER_USERNAME/$IMAGE_NAME:$VERSION --dry-run=client -o yaml > deployment.yaml
+          kubectl create deployment $DEPLOYMENT_NAME --image=$DOCKER_USERNAME/$IMAGE_NAME --dry-run=client -o yaml > deployment.yaml
           kubectl apply -f deployment.yaml
           kubectl create service loadbalancer $DEPLOYMENT_NAME --tcp=80:$PORT --dry-run=client -o yaml > service.yaml
           kubectl apply -f service.yaml
