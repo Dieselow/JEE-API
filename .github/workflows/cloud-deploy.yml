@@ -3,23 +3,21 @@
 name: Build and Deploy to Azure
 
 on:
-  push:
-    # Sequence of patterns matched against refs/tags
-    branches:
-      - master
+  push
 # Environment variables available to all jobs and steps in this workflow
 env:
   GITHUB_SHA: ${{ github.sha }}
   REGISTRY_HOSTNAME: .azurecr.io
   IMAGE_NAME: jee-api-spring
   ACR_REGISTRY_NAME: ${{ secrets.ACR_REGISTRY_NAME }}
-  ACR_USERNAME: ${{ secrets.ACR_USERNAME }}
-  ACR_SECRET: ${{ secrets.ACR_SECRET}}
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD}}
+  DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
   AKS_RESOURCE_GROUP: ${{ secrets.AKS_RESOURCE_GROUP }}
   AKS_CLUSTER_NAME: ${{ secrets.AKS_CLUSTER_NAME }}
   SPRING_ENV: ${{ secrets.SPRING_ENV}}
   DEPLOYMENT_NAME: jee-api
-  VERSION: v2
+  VERSION: v1
 
   PORT: 3001
 
@@ -42,19 +40,19 @@ jobs:
       # Build the Docker image
       - name: Build with Docker
         run: |
-          docker build -t "$ACR_REGISTRY_NAME"/"$IMAGE_NAME":"$VERSION" .
+          docker login ${DOCKER_REGISTRY} -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
+          docker build -t "$DOCKER_USERNAME"/"$IMAGE_NAME":"$VERSION" .
       # Push the image to Azure Container Registry (ACR)
       - name: Push the image to ICR
         run: |
-          az acr login -n ${ACR_REGISTRY_NAME} -u ${ACR_USERNAME} -p ${ACR_SECRET}
-          docker push $ACR_REGISTRY_NAME/$IMAGE_NAME:$VERSION
+          docker push $DOCKER_USERNAME/$IMAGE_NAME:$VERSION
 
       # Deploy the Docker image to the ACR cluster
       - name: Deploy to ACR
         run: |
           az aks get-credentials --resource-group $AKS_RESOURCE_GROUP --name $AKS_CLUSTER_NAME
           kubectl config current-context
-          kubectl create deployment $DEPLOYMENT_NAME --image=$ACR_REGISTRY_NAME/$IMAGE_NAME:$VERSION --dry-run=client -o yaml > deployment.yaml
+          kubectl create deployment $DEPLOYMENT_NAME --image=$DOCKER_USERNAME/$IMAGE_NAME:$VERSION --dry-run=client -o yaml > deployment.yaml
           kubectl apply -f deployment.yaml
           kubectl create service loadbalancer $DEPLOYMENT_NAME --tcp=80:$PORT --dry-run=client -o yaml > service.yaml
           kubectl apply -f service.yaml
