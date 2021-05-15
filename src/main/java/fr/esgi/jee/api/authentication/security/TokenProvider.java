@@ -21,8 +21,6 @@ public class TokenProvider {
     @Value("${security.token.secret}")
     private String secretKey;
     private final long tokenValidityInMilliseconds = Duration.ofMinutes(600).getSeconds() * 1000;
-    @Autowired
-    private UserServiceImpl userService;
 
     public String createToken(String username, Set<Role> set) {
         Claims claims = Jwts.claims().setSubject(username);
@@ -38,13 +36,9 @@ public class TokenProvider {
                 .compact();
     }
 
-    public Authentication getAuthentication(String token) {
-        Claims claims = parseToken(token).getBody();
-        UserDetails userDetails = this.userService.loadUserByUsername(claims.getSubject());
-        return new UsernamePasswordAuthenticationToken(userDetails, token, userDetails.getAuthorities());
-    }
 
-    private Jws<Claims> parseToken(String authToken) {
+
+    public Jws<Claims> parseToken(String authToken) {
         return Jwts.parser()
                 .setSigningKey(this.secretKey)
                 .parseClaimsJws(authToken);

@@ -1,6 +1,11 @@
 package fr.esgi.jee.api.users.domain;
 import fr.esgi.jee.api.authentication.login.Role;
 import fr.esgi.jee.api.authentication.login.RoleRepository;
+import fr.esgi.jee.api.authentication.security.TokenProvider;
+import io.jsonwebtoken.Claims;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +23,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder bCryptEncoder;
+    @Autowired
+    private TokenProvider tokenProvider;
 
     /**
      * Constructor Injection
@@ -68,6 +75,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     private UserDetails buildUserForAuthentication(User user, List<GrantedAuthority> authorities) {
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);
+    }
+    public Authentication getAuthentication(String token) {
+        Claims claims = this.tokenProvider.parseToken(token).getBody();
+        UserDetails userDetails = this.loadUserByUsername(claims.getSubject());
+        return new UsernamePasswordAuthenticationToken(userDetails, token, userDetails.getAuthorities());
     }
 
     @Override
