@@ -6,5 +6,4 @@ import java.util.List;
 
 public interface PartnerService {
     Partner addPartner(Partner partner, User user);
-    List<Partner> getPartners();
 }

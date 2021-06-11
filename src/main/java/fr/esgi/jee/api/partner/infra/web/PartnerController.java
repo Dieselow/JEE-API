@@ -2,7 +2,10 @@ package fr.esgi.jee.api.partner.infra.web;
 
 import fr.esgi.jee.api.partner.domain.Partner;
 import fr.esgi.jee.api.partner.domain.PartnerServiceImpl;
+import fr.esgi.jee.api.partner.domain.timeslot.TimeSlot;
+import fr.esgi.jee.api.partner.domain.timeslot.TimeSlotService;
 import fr.esgi.jee.api.partner.infra.dto.CreatePartnerDTO;
+import fr.esgi.jee.api.partner.infra.dto.CreateTimeSlotDTO;
 import fr.esgi.jee.api.users.domain.User;
 import fr.esgi.jee.api.users.domain.UserServiceImpl;
 import org.springframework.http.HttpStatus;
@@ -15,8 +18,8 @@ import java.util.List;
 @RequestMapping("/partner")
 public class PartnerController {
 
-    private final PartnerServiceImpl partnerService;
     private final UserServiceImpl userService;
+    private final PartnerServiceImpl partnerService;
 
     public PartnerController(PartnerServiceImpl partnerService, UserServiceImpl userServiceImpl) {
         this.partnerService = partnerService;
@@ -41,8 +44,14 @@ public class PartnerController {
 
     @GetMapping("{id}")
     public ResponseEntity<List<Partner>> getPartnersFromUserId(@PathVariable String id) {
-        List partners = partnerService.findById(id);
+        List partners = partnerService.findByOwnerId(id);
         return new ResponseEntity<>(partners, HttpStatus.OK);
     }
+
+//    @PostMapping("timeslot")
+//    public ResponseEntity<TimeSlot> addTimeSlot(@RequestBody CreateTimeSlotDTO createTimeSlotDTO) {
+//        TimeSlot created = timeSlotService.createTimeSlot(createTimeSlotDTO.getTimeSlot(), createTimeSlotDTO.getPartner());
+//        return new ResponseEntity<>(created, HttpStatus.CREATED);
+//    }
 }
 
