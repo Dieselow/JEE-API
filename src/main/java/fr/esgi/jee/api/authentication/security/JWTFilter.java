@@ -1,7 +1,5 @@
 package fr.esgi.jee.api.authentication.security;
 
-import fr.esgi.jee.api.users.domain.UserServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
@@ -14,10 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 public class JWTFilter extends GenericFilterBean {
-    @Autowired
+
     private TokenProvider tokenProvider;
-    @Autowired
-    private UserServiceImpl userService;
 
     public JWTFilter(TokenProvider tokenProvider) {
         this.tokenProvider = tokenProvider;
@@ -28,7 +24,7 @@ public class JWTFilter extends GenericFilterBean {
             throws IOException, ServletException {
         String token = tokenProvider.resolveToken((HttpServletRequest) req);
         if (token != null && tokenProvider.validateToken(token)) {
-            Authentication auth = this.userService.getAuthentication(token);
+            Authentication auth = this.tokenProvider.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(auth);
         }
         filterChain.doFilter(req, res);
