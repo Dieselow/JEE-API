@@ -1,6 +1,7 @@
 package fr.esgi.jee.api.users.domain;
 
 import fr.esgi.jee.api.authentication.login.Role;
+import fr.esgi.jee.api.partner.domain.Partner;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -29,11 +30,13 @@ public class User {
     @Indexed(unique = true)
     private String email;
     private String password;
-    private int phoneNumber;
+    private String phoneNumber;
     @Field(value = "create_date")
     private Date createDate;
     @Field(value = "close_date")
     private Date closeDate;
     @DBRef
     private Set<Role> roles;
+    @DBRef
+    private Set<Partner> partners;
 }

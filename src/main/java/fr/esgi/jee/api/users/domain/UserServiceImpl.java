@@ -9,8 +9,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
@@ -74,7 +76,57 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    public User findUserById(String _id) {
+        Optional<User> user = userRepository.findById(_id);
+        if(user.isPresent()){
+            return user.get();
+        }
+        return null;
+    }
+
+    @Override
     public List<User> getUsers() {
         return userRepository.findAll();
+    }
+
+    public User updateUser(User newUser) {
+        User dbUser = this.findUserById(newUser.getId());
+        dbUser = this.fillUser(dbUser, newUser);
+        return userRepository.save(dbUser);
+    }
+
+    public User fillUser(User finalUser, User newUser){
+        if(newUser.getFirstName() != null)
+            finalUser.setFirstName(newUser.getFirstName());
+        if(newUser.getLastName() != null)
+            finalUser.setLastName(newUser.getLastName());
+        if(newUser.getPhoneNumber() != null)
+            finalUser.setPhoneNumber(newUser.getPhoneNumber());
+        if(newUser.getEmail() != null)
+            finalUser.setEmail(newUser.getEmail());
+        if(newUser.getPartners() != null)
+            finalUser.setPartners(newUser.getPartners());
+        if(newUser.getPassword() != null)
+            finalUser.setPassword(this.bCryptEncoder.encode(newUser.getPassword()));
+        return finalUser;
+    }
+
+    public User addRole(User user, String newRole){
+        User dbUser = findUserById(user.getId());
+        var roles = dbUser.getRoles();
+        roles.add(roleRepository.findByRole(newRole));
+        dbUser.setRoles(roles);
+        return userRepository.save(dbUser);
+    }
+
+    public User removeRole(User user, String deleteRole){
+        User dbUser = findUserById(user.getId());
+        var roles = dbUser.getRoles();
+        dbUser.setRoles(
+                roles.stream()
+                    .filter(role -> !role.getRole().equals(deleteRole))
+                    .collect(Collectors.toSet())
+        );
+        return userRepository.save(dbUser);
     }
 }

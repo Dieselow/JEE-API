@@ -20,7 +20,9 @@ public class TokenProvider {
 
     @Value("${security.token.secret}")
     private String secretKey;
-    private final long tokenValidityInMilliseconds = Duration.ofMinutes(90).getSeconds() * 1000;
+
+    @Value("${security.token.ttl.milliseconds}")
+    private long tokenValidityInMilliseconds;
 
     @Autowired
     private UserServiceImpl userService;
