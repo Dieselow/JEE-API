@@ -65,7 +65,6 @@ public class UserController {
 
     @PutMapping("role")
     public ResponseEntity<User> updateUserRole(@RequestBody EditRoleDTO editRoleDTO) {
-        System.out.println("HELLOOOOO");
         try {
             User updatedUser = null;
             switch(editRoleDTO.action){
