@@ -1,4 +1,4 @@
-package fr.esgi.jee.api.partner.infra.web;
+package fr.esgi.jee.api.partner.infra.dto;
 
 import fr.esgi.jee.api.partner.domain.Partner;
 import lombok.Builder;
@@ -7,6 +7,6 @@ import lombok.Data;
 @Data
 @Builder
 public class CreatePartnerDTO {
-    private Partner partner;
-    private String userId;
+    public Partner partner;
+    public String userId;
 }

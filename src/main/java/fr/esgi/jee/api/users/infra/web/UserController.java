@@ -2,6 +2,7 @@ package fr.esgi.jee.api.users.infra.web;
 
 import fr.esgi.jee.api.users.domain.User;
 import fr.esgi.jee.api.users.domain.UserServiceImpl;
+import fr.esgi.jee.api.users.infra.dto.EditRoleDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

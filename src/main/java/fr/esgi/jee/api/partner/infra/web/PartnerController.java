@@ -1,26 +1,14 @@
 package fr.esgi.jee.api.partner.infra.web;
 
-import fr.esgi.jee.api.authentication.login.LoginDTO;
-import fr.esgi.jee.api.authentication.login.LoginResponseDTO;
-import fr.esgi.jee.api.authentication.security.TokenProvider;
 import fr.esgi.jee.api.partner.domain.Partner;
 import fr.esgi.jee.api.partner.domain.PartnerServiceImpl;
+import fr.esgi.jee.api.partner.infra.dto.CreatePartnerDTO;
 import fr.esgi.jee.api.users.domain.User;
 import fr.esgi.jee.api.users.domain.UserServiceImpl;
-import lombok.Builder;
-import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 @RestController
