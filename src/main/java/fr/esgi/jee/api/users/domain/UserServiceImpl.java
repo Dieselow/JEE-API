@@ -2,6 +2,7 @@ package fr.esgi.jee.api.users.domain;
 
 import fr.esgi.jee.api.authentication.login.Role;
 import fr.esgi.jee.api.authentication.login.RoleRepository;
+import fr.esgi.jee.api.partner.domain.Partner;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -43,6 +44,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                         .createDate(new Date())
                         .closeDate(null)
                         .roles(new HashSet<>(Arrays.asList(userRole)))
+                        .partners(new HashSet<>(new ArrayList<>()))
                         .build()
         );
     }
@@ -76,8 +78,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User findUserById(String _id) {
-        Optional<User> user = userRepository.findById(_id);
+    public User findUserById(String id) {
+        Optional<User> user = userRepository.findById(id);
         if(user.isPresent()){
             return user.get();
         }
@@ -128,5 +130,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                     .collect(Collectors.toSet())
         );
         return userRepository.save(dbUser);
+    }
+
+    public void delete(String id){
+        User user = User.builder()
+                        .id(id)
+                        .build();
+        userRepository.delete(user);
     }
 }
