@@ -1,6 +1,7 @@
 package fr.esgi.jee.api.authentication.security;
 
 import fr.esgi.jee.api.authentication.login.Role;
+import fr.esgi.jee.api.users.domain.User;
 import fr.esgi.jee.api.users.domain.UserServiceImpl;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +28,11 @@ public class TokenProvider {
     @Autowired
     private UserServiceImpl userService;
 
-    public String createToken(String username, Set<Role> set) {
-        Claims claims = Jwts.claims().setSubject(username);
-        claims.put("roles", set);
+    public String createToken(User user) {
+        Claims claims = Jwts.claims();
+        claims.put("email", user.getEmail());
+        claims.put("id", user.getId());
+        claims.put("roles", user.getRoles());
 
         Date validity = new Date((new Date()).getTime() + this.tokenValidityInMilliseconds);
 

@@ -39,8 +39,7 @@ public class AuthenticationController {
         authenticationManager.getObject().authenticate(authenticationToken);
 
         String token = tokenProvider.createToken(
-                loginDTO.getEmail(),
-                this.userService.findUserByEmail(loginDTO.getEmail()).getRoles());
+                this.userService.findUserByEmail(loginDTO.getEmail()));
 
 
         LoginResponseDTO response = new LoginResponseDTO();
