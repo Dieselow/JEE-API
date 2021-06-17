@@ -27,7 +27,7 @@ public class Partner {
     private Date createDate;
     @Field(value = "close_date")
     private Date closeDate;
-    @Field(value = "close_date")
+    @Field(value = "time_slots")
     @DBRef
     private List<TimeSlot> timeSlots;
 }

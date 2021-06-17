@@ -1,5 +1,7 @@
 package fr.esgi.jee.api.users.domain;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import fr.esgi.jee.api.authentication.login.Role;
 import fr.esgi.jee.api.authentication.login.RoleRepository;
 import fr.esgi.jee.api.partner.domain.Partner;
@@ -137,5 +139,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                         .id(id)
                         .build();
         userRepository.delete(user);
+    }
+
+    public User getUserFromToken(String jwtToken){
+        String[] chunks = jwtToken.split(" ")[1].split("\\.");
+        Base64.Decoder decoder = Base64.getDecoder();
+
+        String header = new String(decoder.decode(chunks[0]));
+        String payload = new String(decoder.decode(chunks[1]));
+
+        JsonObject json = new Gson().fromJson(payload, JsonObject.class);
+
+        return findUserById(json.get("id").getAsString());
     }
 }

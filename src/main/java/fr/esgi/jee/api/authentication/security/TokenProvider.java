@@ -46,7 +46,8 @@ public class TokenProvider {
 
     public Authentication getAuthentication(String token) {
         Claims claims = parseToken(token).getBody();
-        UserDetails userDetails = this.userService.loadUserByUsername(claims.getSubject());
+        UserDetails userDetails = this.userService.loadUserByUsername(claims.get("email").toString());
+
         return new UsernamePasswordAuthenticationToken(userDetails, token, userDetails.getAuthorities());
     }
 

@@ -34,6 +34,7 @@ public class PartnerServiceImpl implements PartnerService {
                         .address(partner.getAddress())
                         .createDate(new Date())
                         .closeDate(null)
+                        .timeSlots(new ArrayList<>())
                         .build()
         );
 
@@ -57,8 +58,8 @@ public class PartnerServiceImpl implements PartnerService {
         return partnerRepository.findById(id);
     }
 
-    public Partner addTimeSlots(List<TimeSlot> timeSlots, Partner partner){
-        Optional<Partner> optionalPartner = this.findById(partner.getId());
+    public Partner addTimeSlots(List<TimeSlot> timeSlots, String partnerId){
+        Optional<Partner> optionalPartner = this.findById(partnerId);
         if(optionalPartner.isPresent()){
             Partner dbPartner = optionalPartner.get();
             List<TimeSlot> slots = dbPartner.getTimeSlots();
