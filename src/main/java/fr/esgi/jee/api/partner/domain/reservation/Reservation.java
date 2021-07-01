@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
-
 import java.util.List;
 
 @Data
@@ -15,5 +13,8 @@ import java.util.List;
 public class Reservation {
     @Id
     private String id;
-    private List<User> users;
+
+    private String owner;
+
+    private List<String> invitedUsers;
 }

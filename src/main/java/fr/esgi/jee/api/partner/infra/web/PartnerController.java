@@ -22,7 +22,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/partner")
+@RequestMapping("partner")
 public class PartnerController {
 
     private final UserServiceImpl userService;
@@ -35,7 +35,7 @@ public class PartnerController {
         this.timeSlotService = timeSlotService;
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<Partner> createPartner(@RequestBody CreatePartnerDTO createPartner) {
         var requieredRole = "PARTNER";
         User user = userService.findUserById(createPartner.getUserId());
@@ -43,10 +43,10 @@ public class PartnerController {
             Partner createdPartner = partnerService.addPartner(createPartner.getPartner(), user);
             return new ResponseEntity<>(createdPartner, HttpStatus.CREATED);
         }
-        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You dont have the partner role.");
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You dont have the partner role.");
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<Partner>> getAllPartners() {
         List partners = partnerService.findAll();
         return new ResponseEntity<>(partners, HttpStatus.OK);
@@ -58,10 +58,10 @@ public class PartnerController {
         return new ResponseEntity<>(partners, HttpStatus.OK);
     }
 
-    @PostMapping("timeslot")
-    public ResponseEntity<TimeSlot> addTimeSlot(@RequestHeader(value="Authorization") String token, @RequestBody CreateTimeSlotDTO createTimeSlotDTO) {
+    @PostMapping("{partnerId}/timeslots")
+    public ResponseEntity<TimeSlot> addTimeSlot(@RequestHeader(value="Authorization") String token, @PathVariable String partnerId, @RequestBody TimeSlot timeslot) {
         User user = userService.getUserFromToken(token);
-        Optional<Partner> partner = partnerService.findById(createTimeSlotDTO.partnerId);
+        Optional<Partner> partner = partnerService.findById(partnerId);
         if(!partner.isPresent()){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "partner not found");
         }
@@ -70,15 +70,15 @@ public class PartnerController {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "you arn't the owner of this partner");
         }
 
-        if(createTimeSlotDTO.getTimeSlot().getStartDate() < new Date().getTime() / 1000){
+        if(timeslot.getStartDate() < new Date().getTime() / 1000){
             throw new ResponseStatusException(HttpStatus.CONFLICT, "can't add a timeslot in the past");
         }
 
-        TimeSlot created = timeSlotService.createTimeSlot(createTimeSlotDTO.getTimeSlot(), createTimeSlotDTO.getPartnerId());
+        TimeSlot created = timeSlotService.createTimeSlot(timeslot, partnerId);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
-    @PostMapping("{id}/timeslots")
+    @GetMapping("{id}/timeslots")
     public ResponseEntity<List<TimeSlot>> getAvailableTimeSlots(@PathVariable String id) {
 
         Optional<Partner> partner = partnerService.findById(id);
@@ -87,7 +87,7 @@ public class PartnerController {
                     .get()
                     .getTimeSlots()
                     .stream()
-                    .filter(t -> t.getReservation().equals(null) && t.getStartDate() > System.currentTimeMillis())
+                    .filter(t -> t.getReservation() == null)
                     .collect(Collectors.toList());
             return new ResponseEntity<>(slots, HttpStatus.OK);
         }

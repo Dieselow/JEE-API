@@ -4,6 +4,7 @@ import com.mongodb.internal.connection.ClusterDescriptionHelper;
 import fr.esgi.jee.api.partner.domain.Partner;
 import fr.esgi.jee.api.partner.domain.PartnerServiceImpl;
 import fr.esgi.jee.api.partner.infra.dto.CreateTimeSlotRangeDTO;
+import fr.esgi.jee.api.users.domain.User;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TimeSlotServiceImpl implements TimeSlotService {
@@ -74,5 +76,27 @@ public class TimeSlotServiceImpl implements TimeSlotService {
     public List<TimeSlot> findAll(){
         return timeSlotRepository.findAll();
     }
+
+    public Optional<TimeSlot> findById(String id){
+        return timeSlotRepository.findById(id);
+    }
+
+    public TimeSlot update(TimeSlot timeSlot){
+        Optional<TimeSlot> dbTimeSlot = this.findById(timeSlot.getId());
+        if(!dbTimeSlot.isPresent()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        TimeSlot updated = this.fillTimeSlot(dbTimeSlot.get(), timeSlot);
+        return timeSlotRepository.save(updated);
+    }
+
+
+    public TimeSlot fillTimeSlot(TimeSlot finalTimeSlot, TimeSlot newTimeSlot){
+        if(newTimeSlot.getReservation() != null)
+            finalTimeSlot.setReservation(newTimeSlot.getReservation());
+
+        return finalTimeSlot;
+    }
+
 
 }
