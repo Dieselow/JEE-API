@@ -32,10 +32,11 @@ public class TimeSlotServiceImpl implements TimeSlotService {
 
     @Override
     public TimeSlot createTimeSlot(TimeSlot timeSlot, String partnerId) {
-        var conflictingSlots = timeSlotRepository.findConflicting(timeSlot.getStartDate(), timeSlot.getEndDate());
-        if (conflictingSlots != null && conflictingSlots.size() > 0){
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "can't add a timeslot a the same time as another one");
-        }
+//NOT NEEDED KEEP HERE FOR NOW
+//        var conflictingSlots = timeSlotRepository.findConflicting(timeSlot.getStartDate(), timeSlot.getEndDate());
+//        if (conflictingSlots != null && conflictingSlots.size() > 0){
+//            throw new ResponseStatusException(HttpStatus.CONFLICT, "can't add a timeslot a the same time as another one");
+//        }
         TimeSlot createdTimeSlot = timeSlotRepository.save(
                 TimeSlot.builder()
                         .startDate(timeSlot.getStartDate())
@@ -53,6 +54,8 @@ public class TimeSlotServiceImpl implements TimeSlotService {
 
     @Override
     public List<TimeSlot> createTimeSlotByRange(CreateTimeSlotRangeDTO createTimeSlotRangeDTO) {
+
+        //TODO: MAXIME
         List<TimeSlot> timeSlots = new ArrayList<>();
         final long slotDuration = (long) createTimeSlotRangeDTO.getSlotDurationMin() * 60 * 1000;
 
@@ -67,10 +70,6 @@ public class TimeSlotServiceImpl implements TimeSlotService {
 
 
         return timeSlots;
-    }
-
-    public List<TimeSlot> test(long startDate, long endDate){
-        return timeSlotRepository.findConflicting(startDate, endDate);
     }
 
     public List<TimeSlot> findAll(){
