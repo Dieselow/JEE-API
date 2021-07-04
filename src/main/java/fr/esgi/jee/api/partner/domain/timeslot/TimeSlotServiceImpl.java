@@ -1,11 +1,7 @@
 package fr.esgi.jee.api.partner.domain.timeslot;
 
-import com.mongodb.internal.connection.ClusterDescriptionHelper;
-import fr.esgi.jee.api.partner.domain.Partner;
 import fr.esgi.jee.api.partner.domain.PartnerServiceImpl;
 import fr.esgi.jee.api.partner.infra.dto.CreateTimeSlotRangeDTO;
-import fr.esgi.jee.api.users.domain.User;
-import org.springframework.data.mongodb.repository.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -97,5 +93,13 @@ public class TimeSlotServiceImpl implements TimeSlotService {
         return finalTimeSlot;
     }
 
-
+    @Override
+    public TimeSlot cancelReservation(String id) {
+        Optional<TimeSlot> timeSlot = findById(id);
+        if(!timeSlot.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        timeSlot.get().setReservation(null);
+        return this.timeSlotRepository.save(timeSlot.get());
+    }
 }

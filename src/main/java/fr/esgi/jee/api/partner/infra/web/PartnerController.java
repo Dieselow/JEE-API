@@ -1,15 +1,10 @@
 package fr.esgi.jee.api.partner.infra.web;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import fr.esgi.jee.api.partner.domain.Partner;
 import fr.esgi.jee.api.partner.domain.PartnerServiceImpl;
 import fr.esgi.jee.api.partner.domain.timeslot.TimeSlot;
-import fr.esgi.jee.api.partner.domain.timeslot.TimeSlotService;
 import fr.esgi.jee.api.partner.domain.timeslot.TimeSlotServiceImpl;
 import fr.esgi.jee.api.partner.infra.dto.CreatePartnerDTO;
-import fr.esgi.jee.api.partner.infra.dto.CreateTimeSlotDTO;
 import fr.esgi.jee.api.partner.infra.dto.CreateTimeSlotRangeDTO;
 import fr.esgi.jee.api.users.domain.User;
 import fr.esgi.jee.api.users.domain.UserServiceImpl;
@@ -48,13 +43,13 @@ public class PartnerController {
 
     @GetMapping
     public ResponseEntity<List<Partner>> getAllPartners() {
-        List partners = partnerService.findAll();
+        List<Partner> partners = partnerService.findAll();
         return new ResponseEntity<>(partners, HttpStatus.OK);
     }
 
     @GetMapping("{id}")
     public ResponseEntity<List<Partner>> getPartnersFromUserId(@PathVariable String id) {
-        List partners = partnerService.findByOwnerId(id);
+        List<Partner> partners = partnerService.findByOwnerId(id);
         return new ResponseEntity<>(partners, HttpStatus.OK);
     }
 
@@ -105,12 +100,6 @@ public class PartnerController {
 
         List<TimeSlot> createdSlots = timeSlotService.createTimeSlotByRange(createTimeSlotRangeDTO);
         return new ResponseEntity<>(createdSlots, HttpStatus.CREATED);
-    }
-
-    @PostMapping("test")
-    public ResponseEntity<List<TimeSlot>> test(@RequestBody CreateTimeSlotDTO createTimeSlotDTO) {
-        var res = timeSlotService.test(createTimeSlotDTO.getTimeSlot().getStartDate(), createTimeSlotDTO.getTimeSlot().getEndDate());
-        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @GetMapping("{id}/prettifySlotDate")

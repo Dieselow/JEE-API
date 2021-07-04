@@ -1,9 +1,7 @@
 package fr.esgi.jee.api.partner.domain.reservation;
 
-import fr.esgi.jee.api.partner.domain.timeslot.TimeSlot;
-import fr.esgi.jee.api.partner.infra.dto.CreateTimeSlotRangeDTO;
-
-import java.util.List;
-
 public interface ReservationService {
+    Reservation create(Reservation reservation);
+    Reservation update(Reservation reservation);
+    void delete(String id);
 }
