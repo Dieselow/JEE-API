@@ -73,7 +73,7 @@ public class UserController {
                     updatedUser = userService.addRole(editRoleDTO.getUser(), editRoleDTO.getRole());
                     break;
                 case REMOVE:
-                    updatedUser = userService.removeRole(editRoleDTO.getUser(), editRoleDTO.getRole());
+                    updatedUser = userService.removeRole(editRoleDTO.getUser());
                     break;
                 default:
                     throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wrong action type");

@@ -1,10 +1,15 @@
 package fr.esgi.jee.api.partner.infra.web;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import fr.esgi.jee.api.partner.domain.Partner;
 import fr.esgi.jee.api.partner.domain.PartnerServiceImpl;
 import fr.esgi.jee.api.partner.domain.timeslot.TimeSlot;
+import fr.esgi.jee.api.partner.domain.timeslot.TimeSlotService;
 import fr.esgi.jee.api.partner.domain.timeslot.TimeSlotServiceImpl;
 import fr.esgi.jee.api.partner.infra.dto.CreatePartnerDTO;
+import fr.esgi.jee.api.partner.infra.dto.CreateTimeSlotDTO;
 import fr.esgi.jee.api.partner.infra.dto.CreateTimeSlotRangeDTO;
 import fr.esgi.jee.api.users.domain.User;
 import fr.esgi.jee.api.users.domain.UserServiceImpl;
@@ -35,7 +40,7 @@ public class PartnerController {
         var requieredRole = "PARTNER";
         User user = userService.findUserById(createPartner.getUserId());
         if (user.getRoles().stream().anyMatch(role -> role.getRole().equals(requieredRole))){
-            Partner createdPartner = partnerService.addPartner(createPartner.getPartner(), user);
+            Partner createdPartner = partnerService.addPartner(createPartner.getPartner(), createPartner.address, user);
             return new ResponseEntity<>(createdPartner, HttpStatus.CREATED);
         }
         throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You dont have the partner role.");

@@ -2,9 +2,9 @@ package fr.esgi.jee.api.users.domain;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import fr.esgi.jee.api.authentication.login.LoginDTO;
 import fr.esgi.jee.api.authentication.login.Role;
 import fr.esgi.jee.api.authentication.login.RoleRepository;
-import fr.esgi.jee.api.partner.domain.Partner;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,10 +12,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
@@ -117,20 +115,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     public User addRole(User user, String newRole){
         User dbUser = findUserById(user.getId());
-        var roles = dbUser.getRoles();
-        roles.add(roleRepository.findByRole(newRole));
+        var roles = new HashSet<>(Arrays.asList(roleRepository.findByRole(newRole)));
         dbUser.setRoles(roles);
         return userRepository.save(dbUser);
     }
 
-    public User removeRole(User user, String deleteRole){
+    public User removeRole(User user){
         User dbUser = findUserById(user.getId());
-        var roles = dbUser.getRoles();
-        dbUser.setRoles(
-                roles.stream()
-                    .filter(role -> !role.getRole().equals(deleteRole))
-                    .collect(Collectors.toSet())
-        );
+        dbUser.setRoles(new HashSet<>(Arrays.asList()));
         return userRepository.save(dbUser);
     }
 

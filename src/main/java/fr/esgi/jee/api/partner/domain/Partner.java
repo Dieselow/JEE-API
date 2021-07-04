@@ -1,5 +1,6 @@
 package fr.esgi.jee.api.partner.domain;
 
+import fr.esgi.jee.api.geolocaliztion.models.Address;
 import fr.esgi.jee.api.partner.domain.timeslot.TimeSlot;
 import lombok.Builder;
 import lombok.Data;
@@ -22,7 +23,7 @@ public class Partner {
     private String name;
     private String phoneNumber;
     @Indexed(unique = true)
-    private String address;
+    private Address address;
     @Field(value = "create_date")
     private Date createDate;
     @Field(value = "close_date")
