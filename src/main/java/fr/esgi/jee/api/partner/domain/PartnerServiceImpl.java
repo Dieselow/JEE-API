@@ -1,5 +1,7 @@
 package fr.esgi.jee.api.partner.domain;
-import fr.esgi.jee.api.authentication.login.RoleRepository;
+
+import fr.esgi.jee.api.geolocaliztion.GeolocaliztionService;
+import fr.esgi.jee.api.geolocaliztion.models.Address;
 import fr.esgi.jee.api.partner.domain.timeslot.TimeSlot;
 import fr.esgi.jee.api.users.domain.User;
 import fr.esgi.jee.api.users.domain.UserServiceImpl;
@@ -14,24 +16,32 @@ public class PartnerServiceImpl implements PartnerService {
 
     private final UserServiceImpl userService;
     private final PartnerRepository partnerRepository;
+    private final GeolocaliztionService geolocaliztionService;
 
     /**
      * Constructor Injection
      * better than @Autowired
      */
-    public PartnerServiceImpl(PartnerRepository partnerRepository, UserServiceImpl userService) {
+    public PartnerServiceImpl(PartnerRepository partnerRepository, UserServiceImpl userService, GeolocaliztionService geolocaliztionService) {
         this.partnerRepository = partnerRepository;
         this.userService = userService;
+        this.geolocaliztionService = geolocaliztionService;
     }
 
     @Override
-    public Partner addPartner(Partner partner, User user) {
+    public Partner addPartner(Partner partner, String strAddress, User user) {
+
+        Address address = null;
+        try{
+            address = geolocaliztionService.addressToGeoloc(strAddress).getData().get(0);
+        }catch (Exception e){
+        }
 
         Partner createdPartner = partnerRepository.save(
                 Partner.builder()
                         .name(partner.getName())
                         .phoneNumber(partner.getPhoneNumber())
-                        .address(partner.getAddress())
+                        .address(address)
                         .createDate(new Date())
                         .closeDate(null)
                         .timeSlots(new ArrayList<>())

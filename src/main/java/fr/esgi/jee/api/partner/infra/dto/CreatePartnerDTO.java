@@ -8,5 +8,6 @@ import lombok.Data;
 @Builder
 public class CreatePartnerDTO {
     public Partner partner;
+    public String address;
     public String userId;
 }
