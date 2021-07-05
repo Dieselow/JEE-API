@@ -1,108 +1,8 @@
 _type: export
 __export_format: 4
-__export_date: 2021-07-05T15:06:19.613Z
+__export_date: 2021-07-05T15:14:28.676Z
 __export_source: insomnia.desktop.app:v2021.4.0
 resources:
-  - _id: req_a0ba4cb609de42639394c061d1cd390a
-    parentId: wrk_4937aa0f1af5435c90027f467c85fbfa
-    modified: 1625431228680
-    created: 1625431142601
-    url: "{{ _.url }}/reservation/60e1cb44ab6687295a89fea3"
-    name: delete
-    description: ""
-    method: DELETE
-    body: {}
-    parameters: []
-    headers: []
-    authentication:
-      type: bearer
-      token: "{% response 'body', 'req_475a04d7ac8943c8bf74ed496fdc08db',
-        'b64::JC50b2tlbg==::46b', 'always', 60 %}"
-    metaSortKey: -1625431142601
-    isPrivate: false
-    settingStoreCookies: true
-    settingSendCookies: true
-    settingDisableRenderRequestBody: false
-    settingEncodeUrl: true
-    settingRebuildPath: true
-    settingFollowRedirects: global
-    _type: request
-  - _id: wrk_4937aa0f1af5435c90027f467c85fbfa
-    parentId: null
-    modified: 1620658040996
-    created: 1620658040996
-    name: Jee Api
-    description: ""
-    scope: collection
-    _type: workspace
-  - _id: req_8c1349965e0f47a5ac6188277f705766
-    parentId: wrk_4937aa0f1af5435c90027f467c85fbfa
-    modified: 1625496622943
-    created: 1625410417669
-    url: "{{ _.url }}/timeslots/60de33b4a2b35a3b625f0263/cancel"
-    name: update réservation
-    description: ""
-    method: PUT
-    body:
-      mimeType: application/json
-      text: |-
-        {
-        	"id": "60e1cb44ab6687295a89fea3",
-        	"owner":"60e1882a3ad87a713a6e26d5",
-        	"invitedUsers": ["julien@gmail.fr"]
-        }
-    parameters: []
-    headers:
-      - name: Content-Type
-        value: application/json
-    authentication:
-      type: bearer
-      token: "{% response 'body', 'req_475a04d7ac8943c8bf74ed496fdc08db',
-        'b64::JC50b2tlbg==::46b', 'always', 60 %}"
-    metaSortKey: -1625410417669
-    isPrivate: false
-    settingStoreCookies: true
-    settingSendCookies: true
-    settingDisableRenderRequestBody: false
-    settingEncodeUrl: true
-    settingRebuildPath: true
-    settingFollowRedirects: global
-    _type: request
-  - _id: req_2461fd8562064d88b482eb59c895998e
-    parentId: wrk_4937aa0f1af5435c90027f467c85fbfa
-    modified: 1625410292483
-    created: 1625394062127
-    url: "{{ _.url }}/timeslots/60de33b4a2b35a3b625f0263/reservation"
-    name: "reservation "
-    description: ""
-    method: POST
-    body:
-      mimeType: application/json
-      text: |-
-        {
-        	"owner": "60e1882a3ad87a713a6e26d5",
-        	"invitedUsers": [
-        		"julientest@gmail.com",
-        		"maxou@gmail.com"
-        	]
-        }
-    parameters: []
-    headers:
-      - name: Content-Type
-        value: application/json
-        id: pair_dfb1b25ca09842b89c2b3a62c997630b
-    authentication:
-      type: bearer
-      token: eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6Imp1bGllbkBnbWFpbC5jb20iLCJpZCI6IjYwZTE4ODJhM2FkODdhNzEzYTZlMjZkNSIsInJvbGVzIjpbeyJpZCI6IjYwOTkzZDY5NDkwNmQyOTg3YzdmMTRkYSIsInJvbGUiOiJVU0VSIn1dLCJpYXQiOjE2MjU0MTAyODEsImV4cCI6MTYyNTQxNTY4MX0.CAi-GQlC1BUC2P493oH7A-S60HbXbrTKhW9Q-4Fmzb6__6LSOCM7Tbgc1kHh1tbtWkxG1z2rFRn4SyHoNj6WGQ
-    metaSortKey: -1625394062128
-    isPrivate: false
-    settingStoreCookies: true
-    settingSendCookies: true
-    settingDisableRenderRequestBody: false
-    settingEncodeUrl: true
-    settingRebuildPath: true
-    settingFollowRedirects: global
-    _type: request
   - _id: req_c2f0bb4b15cd4cb487c7fc49ff60f510
     parentId: fld_08e20f6646fa481397684f44d186bb84
     modified: 1625174773093
@@ -158,6 +58,14 @@ resources:
     environmentPropertyOrder: null
     metaSortKey: -1623400110700
     _type: request_group
+  - _id: wrk_4937aa0f1af5435c90027f467c85fbfa
+    parentId: null
+    modified: 1620658040996
+    created: 1620658040996
+    name: Jee Api
+    description: ""
+    scope: collection
+    _type: workspace
   - _id: req_1601c800eed945e0b90dabf0bfd9506a
     parentId: fld_08e20f6646fa481397684f44d186bb84
     modified: 1624998398293
@@ -321,6 +229,128 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
+  - _id: req_2461fd8562064d88b482eb59c895998e
+    parentId: fld_004a5eaf986b42e488b36873c934a1d3
+    modified: 1625498017920
+    created: 1625394062127
+    url: "{{ _.url }}/timeslots/60de33b4a2b35a3b625f0263/reservation"
+    name: "reservation "
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"owner": "60e1882a3ad87a713a6e26d5",
+        	"invitedUsers": [
+        		"julientest@gmail.com",
+        		"maxou@gmail.com"
+        	]
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_dfb1b25ca09842b89c2b3a62c997630b
+    authentication:
+      type: bearer
+      token: eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6Imp1bGllbkBnbWFpbC5jb20iLCJpZCI6IjYwZTE4ODJhM2FkODdhNzEzYTZlMjZkNSIsInJvbGVzIjpbeyJpZCI6IjYwOTkzZDY5NDkwNmQyOTg3YzdmMTRkYSIsInJvbGUiOiJVU0VSIn1dLCJpYXQiOjE2MjU0MTAyODEsImV4cCI6MTYyNTQxNTY4MX0.CAi-GQlC1BUC2P493oH7A-S60HbXbrTKhW9Q-4Fmzb6__6LSOCM7Tbgc1kHh1tbtWkxG1z2rFRn4SyHoNj6WGQ
+    metaSortKey: -1625431142701
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_004a5eaf986b42e488b36873c934a1d3
+    parentId: fld_c9f7219d7b5d48388a3e1b6a4cb5d715
+    modified: 1625498035445
+    created: 1625001620280
+    name: reservation
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1625180854969
+    _type: request_group
+  - _id: fld_c9f7219d7b5d48388a3e1b6a4cb5d715
+    parentId: fld_f9c10e845f924550bf2925336d044283
+    modified: 1623430281181
+    created: 1623430281181
+    name: timeslot
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1623430281181
+    _type: request_group
+  - _id: fld_f9c10e845f924550bf2925336d044283
+    parentId: wrk_4937aa0f1af5435c90027f467c85fbfa
+    modified: 1623398577713
+    created: 1623398577713
+    name: partner
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1623398577713
+    _type: request_group
+  - _id: req_8c1349965e0f47a5ac6188277f705766
+    parentId: fld_004a5eaf986b42e488b36873c934a1d3
+    modified: 1625498016029
+    created: 1625410417669
+    url: "{{ _.url }}/timeslots/60de33b4a2b35a3b625f0263/cancel"
+    name: update réservation
+    description: ""
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"id": "60e1cb44ab6687295a89fea3",
+        	"owner":"60e1882a3ad87a713a6e26d5",
+        	"invitedUsers": ["julien@gmail.fr"]
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_475a04d7ac8943c8bf74ed496fdc08db',
+        'b64::JC50b2tlbg==::46b', 'always', 60 %}"
+    metaSortKey: -1625431142651
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_a0ba4cb609de42639394c061d1cd390a
+    parentId: fld_004a5eaf986b42e488b36873c934a1d3
+    modified: 1625498013768
+    created: 1625431142601
+    url: "{{ _.url }}/reservation/60e1cb44ab6687295a89fea3"
+    name: delete
+    description: ""
+    method: DELETE
+    body: {}
+    parameters: []
+    headers: []
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_475a04d7ac8943c8bf74ed496fdc08db',
+        'b64::JC50b2tlbg==::46b', 'always', 60 %}"
+    metaSortKey: -1625431142601
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
   - _id: req_879ac907262b47aba56b19cbcd9e6d07
     parentId: fld_c9f7219d7b5d48388a3e1b6a4cb5d715
     modified: 1625181875447
@@ -344,64 +374,6 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
-  - _id: fld_c9f7219d7b5d48388a3e1b6a4cb5d715
-    parentId: fld_f9c10e845f924550bf2925336d044283
-    modified: 1623430281181
-    created: 1623430281181
-    name: timeslot
-    description: ""
-    environment: {}
-    environmentPropertyOrder: null
-    metaSortKey: -1623430281181
-    _type: request_group
-  - _id: fld_f9c10e845f924550bf2925336d044283
-    parentId: wrk_4937aa0f1af5435c90027f467c85fbfa
-    modified: 1623398577713
-    created: 1623398577713
-    name: partner
-    description: ""
-    environment: {}
-    environmentPropertyOrder: null
-    metaSortKey: -1623398577713
-    _type: request_group
-  - _id: req_8dcf589f066f40c0bf1a2b39df7ef44a
-    parentId: fld_004a5eaf986b42e488b36873c934a1d3
-    modified: 1625178011733
-    created: 1625001629970
-    url: "{{ _.url }}/timeslots/60de33b4a2b35a3b625f0263/reservation"
-    name: reservation
-    description: ""
-    method: POST
-    body:
-      mimeType: application/json
-      text: ""
-    parameters: []
-    headers:
-      - name: Content-Type
-        value: application/json
-        id: pair_b0f8724a41ac4ed395d56f8dc78e920e
-    authentication:
-      type: bearer
-      token: "{{ _.token }}"
-    metaSortKey: -1625001629970
-    isPrivate: false
-    settingStoreCookies: true
-    settingSendCookies: true
-    settingDisableRenderRequestBody: false
-    settingEncodeUrl: true
-    settingRebuildPath: true
-    settingFollowRedirects: global
-    _type: request
-  - _id: fld_004a5eaf986b42e488b36873c934a1d3
-    parentId: fld_c9f7219d7b5d48388a3e1b6a4cb5d715
-    modified: 1625001620280
-    created: 1625001620280
-    name: reservation
-    description: ""
-    environment: {}
-    environmentPropertyOrder: null
-    metaSortKey: -1625001620281
-    _type: request_group
   - _id: req_7a11ac9616f24f5ca5dcfefbc775645a
     parentId: fld_c9f7219d7b5d48388a3e1b6a4cb5d715
     modified: 1625177963557
