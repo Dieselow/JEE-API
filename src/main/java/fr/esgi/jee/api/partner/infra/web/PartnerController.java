@@ -15,6 +15,7 @@ import fr.esgi.jee.api.users.domain.User;
 import fr.esgi.jee.api.users.domain.UserServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -35,15 +36,12 @@ public class PartnerController {
         this.timeSlotService = timeSlotService;
     }
 
+    @PreAuthorize("hasRole('PARTNER')")
     @PostMapping
     public ResponseEntity<Partner> createPartner(@RequestBody CreatePartnerDTO createPartner) {
-        var requieredRole = "PARTNER";
         User user = userService.findUserById(createPartner.getUserId());
-        if (user.getRoles().stream().anyMatch(role -> role.getRole().equals(requieredRole))){
-            Partner createdPartner = partnerService.addPartner(createPartner.getPartner(), createPartner.address, user);
-            return new ResponseEntity<>(createdPartner, HttpStatus.CREATED);
-        }
-        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You dont have the partner role.");
+        Partner createdPartner = partnerService.addPartner(createPartner.getPartner(), createPartner.address, user);
+        return new ResponseEntity<>(createdPartner, HttpStatus.CREATED);
     }
 
     @GetMapping
