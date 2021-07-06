@@ -19,14 +19,11 @@ import org.springframework.web.server.ResponseStatusException;
 public class AuthenticationController {
 
     private final TokenProvider tokenProvider;
-    private final AuthenticationManagerBuilder authenticationManager;
     private final UserServiceImpl userService;
 
     public AuthenticationController(TokenProvider tokenProvider,
-                                    AuthenticationManagerBuilder authenticationManager,
                                     UserServiceImpl userService) {
         this.tokenProvider = tokenProvider;
-        this.authenticationManager = authenticationManager;
         this.userService = userService;
     }
 
@@ -34,7 +31,7 @@ public class AuthenticationController {
     public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginDTO loginDTO) {
 
         if(!this.userService.checkUserLogin(loginDTO)){
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "wrong login or password");
         }
 
         String token = tokenProvider.createToken(this.userService.findUserByEmail(loginDTO.getEmail()));
