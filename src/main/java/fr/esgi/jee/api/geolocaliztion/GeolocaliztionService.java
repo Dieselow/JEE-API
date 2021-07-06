@@ -12,7 +12,6 @@ import java.nio.charset.StandardCharsets;
 @Service
 public class GeolocaliztionService {
 
-
     @Value("${geoloc.accessKey}")
     private String accessKey;
 

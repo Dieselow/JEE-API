@@ -144,4 +144,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         return findUserById(json.get("id").getAsString());
     }
+
+    public boolean checkUserLogin(LoginDTO login){
+        User user = findUserByEmail(login.getEmail());
+        return user != null && bCryptEncoder.matches(login.getPassword(), user.getPassword());
+    }
 }

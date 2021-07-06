@@ -7,12 +7,12 @@ import fr.esgi.jee.api.users.domain.User;
 import fr.esgi.jee.api.users.domain.UserServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/auth")
@@ -32,15 +32,12 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginDTO loginDTO) {
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                loginDTO.getEmail(),
-                loginDTO.getPassword());
 
-        authenticationManager.getObject().authenticate(authenticationToken);
+        if(!this.userService.checkUserLogin(loginDTO)){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
 
-        String token = tokenProvider.createToken(
-                this.userService.findUserByEmail(loginDTO.getEmail()));
-
+        String token = tokenProvider.createToken(this.userService.findUserByEmail(loginDTO.getEmail()));
 
         LoginResponseDTO response = new LoginResponseDTO();
         response.setToken(token);
