@@ -10,6 +10,7 @@ import fr.esgi.jee.api.users.domain.User;
 import fr.esgi.jee.api.users.domain.UserServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -30,6 +31,7 @@ public class PartnerController {
         this.timeSlotService = timeSlotService;
     }
 
+    @PreAuthorize("hasRole('PARTNER')")
     @PostMapping
     public ResponseEntity<Partner> createPartner(@RequestBody CreatePartnerDTO createPartner) {
         User user = userService.findUserById(createPartner.getUserId());

@@ -80,7 +80,7 @@ public class UserController {
             }
             return new ResponseEntity<>(updatedUser, HttpStatus.OK);
         } catch (Exception e) {
-            System.out.println(e.getStackTrace().toString());
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
