@@ -44,7 +44,7 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    @GetMapping("id/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<User> getUserById(@PathVariable String id) {
         try {
             User user = userService.findUserById(id);

@@ -6,4 +6,5 @@ import lombok.Data;
 public class CreatingPartnerDTO {
     public String name;
     public String phoneNumber;
+    public String photoUrl;
 }

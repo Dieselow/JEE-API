@@ -28,6 +28,8 @@ public class Partner {
     private Date createDate;
     @Field(value = "close_date")
     private Date closeDate;
+    @Field(value = "photo_url")
+    private String photoUrl;
     @Field(value = "time_slots")
     @DBRef
     private List<TimeSlot> timeSlots;
