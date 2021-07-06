@@ -31,7 +31,6 @@ public class PartnerController {
         this.timeSlotService = timeSlotService;
     }
 
-    @PreAuthorize("hasRole('PARTNER')")
     @PostMapping
     public ResponseEntity<Partner> createPartner(@RequestBody CreatePartnerDTO createPartner) {
         User user = userService.findUserById(createPartner.getUserId());

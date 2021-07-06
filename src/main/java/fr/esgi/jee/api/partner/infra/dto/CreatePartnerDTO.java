@@ -7,7 +7,8 @@ import lombok.Data;
 @Data
 @Builder
 public class CreatePartnerDTO {
-    public Partner partner;
+    public CreatingPartnerDTO partner;
     public String address;
     public String userId;
 }
+

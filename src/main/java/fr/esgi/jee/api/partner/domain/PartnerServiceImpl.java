@@ -3,6 +3,7 @@ package fr.esgi.jee.api.partner.domain;
 import fr.esgi.jee.api.geolocaliztion.GeolocaliztionService;
 import fr.esgi.jee.api.geolocaliztion.models.Address;
 import fr.esgi.jee.api.partner.domain.timeslot.TimeSlot;
+import fr.esgi.jee.api.partner.infra.dto.CreatingPartnerDTO;
 import fr.esgi.jee.api.users.domain.User;
 import fr.esgi.jee.api.users.domain.UserServiceImpl;
 import org.springframework.http.HttpStatus;
@@ -29,7 +30,7 @@ public class PartnerServiceImpl implements PartnerService {
     }
 
     @Override
-    public Partner addPartner(Partner partner, String strAddress, User user) {
+    public Partner addPartner(CreatingPartnerDTO partner, String strAddress, User user) {
 
         Address address = null;
         try{
