@@ -39,7 +39,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/partner").hasAuthority("PARTNER")
                 .antMatchers(HttpMethod.GET, "/reservation*").permitAll()
                 .antMatchers(HttpMethod.POST, "/timeslot/*/reservation").hasAuthority("PARTNER")
-                .antMatchers(HttpMethod.PUT, "/reservation").hasAuthority("PARTNER")
                 .antMatchers(HttpMethod.DELETE, "/reservation/*").hasAuthority("PARTNER")
                 .anyRequest()
                 .authenticated()

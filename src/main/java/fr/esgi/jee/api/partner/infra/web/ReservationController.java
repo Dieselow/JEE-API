@@ -20,8 +20,9 @@ public class ReservationController {
     }
 
     @PutMapping
-    public ResponseEntity<Reservation> updateReservation(@RequestBody Reservation reservation) {
-        return new ResponseEntity<>(this.reservationService.update(reservation), HttpStatus.OK);
+    public ResponseEntity<Reservation> updateReservation(@RequestHeader(value="Authorization") String token,
+                                                         @RequestBody Reservation reservation) {
+        return new ResponseEntity<>(this.reservationService.update(reservation, token), HttpStatus.OK);
     }
 
     @GetMapping("{id}")

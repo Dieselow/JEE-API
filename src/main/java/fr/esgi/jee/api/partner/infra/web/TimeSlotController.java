@@ -36,7 +36,7 @@ public class TimeSlotController {
         Optional<TimeSlot> timeslot = timeSlotService.findById(id);
 
         if(!timeslot.isPresent()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not found !");
         }
 
         if(timeslot.get().getReservation() != null){
@@ -45,8 +45,12 @@ public class TimeSlotController {
 
         Reservation created = reservationService.create(reservation);
         timeslot.get().setReservation(created);
-        timeSlotService.update(timeslot.get());
 
+        if(this.timeSlotService.isReservationConflict(timeslot.get())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "you already have a reservation");
+        }
+
+        timeSlotService.update(timeslot.get());
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 

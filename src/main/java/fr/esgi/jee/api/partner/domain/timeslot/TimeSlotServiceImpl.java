@@ -1,11 +1,13 @@
 package fr.esgi.jee.api.partner.domain.timeslot;
 
 import fr.esgi.jee.api.partner.domain.PartnerServiceImpl;
+import fr.esgi.jee.api.partner.domain.reservation.Reservation;
 import fr.esgi.jee.api.partner.infra.dto.CreateTimeSlotRangeDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -79,14 +81,33 @@ public class TimeSlotServiceImpl implements TimeSlotService {
     public TimeSlot update(TimeSlot timeSlot){
         Optional<TimeSlot> dbTimeSlot = this.findById(timeSlot.getId());
         if(!dbTimeSlot.isPresent()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not found !");
         }
+
         TimeSlot updated = this.fillTimeSlot(dbTimeSlot.get(), timeSlot);
         return timeSlotRepository.save(updated);
     }
 
+    public boolean isReservationConflict(TimeSlot timeSlot) {
+        // get all user timeSlot with FindAllByUserId(timeSlot.getReservation().getOwner())
+        //mock
+        TimeSlot t = TimeSlot.builder().startDate(4).endDate(12).build();
+        List<TimeSlot> list = new ArrayList<>();
+        list.add(t);
 
-    public TimeSlot fillTimeSlot(TimeSlot finalTimeSlot, TimeSlot newTimeSlot){
+        for(TimeSlot _timeSlot : list) {
+            if ((timeSlot.getStartDate() >= _timeSlot.getStartDate() && timeSlot.getEndDate() >= _timeSlot.getEndDate())
+                || (timeSlot.getStartDate() <= _timeSlot.getStartDate() && timeSlot.getEndDate() <= _timeSlot.getEndDate())
+                || (timeSlot.getStartDate() <= _timeSlot.getEndDate() && timeSlot.getEndDate() >= _timeSlot.getStartDate())
+                || (timeSlot.getStartDate() <= _timeSlot.getStartDate() && timeSlot.getEndDate() >= _timeSlot.getEndDate())
+                ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private TimeSlot fillTimeSlot(TimeSlot finalTimeSlot, TimeSlot newTimeSlot){
         if(newTimeSlot.getReservation() != null)
             finalTimeSlot.setReservation(newTimeSlot.getReservation());
 
