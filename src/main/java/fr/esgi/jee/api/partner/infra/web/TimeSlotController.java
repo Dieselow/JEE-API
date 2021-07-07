@@ -45,10 +45,10 @@ public class TimeSlotController {
 
         Reservation created = reservationService.create(reservation);
         timeslot.get().setReservation(created);
-
-        if(this.timeSlotService.isReservationConflict(timeslot.get())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "you already have a reservation");
-        }
+// call user timeslot list
+//        if(this.timeSlotService.isReservationConflict(timeslot.get())) {
+//            throw new ResponseStatusException(HttpStatus.CONFLICT, "you already have a reservation");
+//        }
 
         timeSlotService.update(timeslot.get());
         return new ResponseEntity<>(created, HttpStatus.CREATED);

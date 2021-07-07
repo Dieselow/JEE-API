@@ -88,19 +88,11 @@ public class TimeSlotServiceImpl implements TimeSlotService {
         return timeSlotRepository.save(updated);
     }
 
-    public boolean isReservationConflict(TimeSlot timeSlot) {
-        // get all user timeSlot with FindAllByUserId(timeSlot.getReservation().getOwner())
-        //mock
-        TimeSlot t = TimeSlot.builder().startDate(4).endDate(12).build();
-        List<TimeSlot> list = new ArrayList<>();
-        list.add(t);
-
+    public boolean isReservationConflict(TimeSlot timeSlot, List<TimeSlot> list) {
         for(TimeSlot _timeSlot : list) {
-            if ((timeSlot.getStartDate() >= _timeSlot.getStartDate() && timeSlot.getEndDate() >= _timeSlot.getEndDate())
-                || (timeSlot.getStartDate() <= _timeSlot.getStartDate() && timeSlot.getEndDate() <= _timeSlot.getEndDate())
+            if ((timeSlot.getStartDate() <= _timeSlot.getStartDate() && timeSlot.getEndDate() <= _timeSlot.getEndDate())
                 || (timeSlot.getStartDate() <= _timeSlot.getEndDate() && timeSlot.getEndDate() >= _timeSlot.getStartDate())
-                || (timeSlot.getStartDate() <= _timeSlot.getStartDate() && timeSlot.getEndDate() >= _timeSlot.getEndDate())
-                ) {
+                || (timeSlot.getStartDate() <= _timeSlot.getStartDate() && timeSlot.getEndDate() >= _timeSlot.getEndDate())) {
                 return true;
             }
         }
@@ -122,5 +114,9 @@ public class TimeSlotServiceImpl implements TimeSlotService {
         }
         timeSlot.get().setReservation(null);
         return this.timeSlotRepository.save(timeSlot.get());
+    }
+
+    public void test() {
+        System.out.println("here");
     }
 }
