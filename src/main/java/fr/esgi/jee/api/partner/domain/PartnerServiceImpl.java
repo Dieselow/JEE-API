@@ -46,6 +46,7 @@ public class PartnerServiceImpl implements PartnerService {
                         .createDate(new Date())
                         .closeDate(null)
                         .timeSlots(new ArrayList<>())
+                        .photoUrl(partner.photoUrl)
                         .build()
         );
 

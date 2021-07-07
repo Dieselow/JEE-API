@@ -5,9 +5,12 @@ import fr.esgi.jee.api.partner.domain.reservation.ReservationServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/reservation")
+@RequestMapping("reservation")
 public class ReservationController {
 
     private final ReservationServiceImpl reservationService;
@@ -21,7 +24,16 @@ public class ReservationController {
         return new ResponseEntity<>(this.reservationService.update(reservation), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @GetMapping("{id}")
+    public ResponseEntity<Reservation> getReservation(@PathVariable String id) {
+        Optional<Reservation> reservation = this.reservationService.findById(id);
+        if(!reservation.isPresent()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "reservation not found");
+        }
+        return new ResponseEntity<>(reservation.get(), HttpStatus.OK);
+    }
+
+    @DeleteMapping("{id}")
     public ResponseEntity deleteReservation(@PathVariable String id) {
         try {
             this.reservationService.delete(id);
