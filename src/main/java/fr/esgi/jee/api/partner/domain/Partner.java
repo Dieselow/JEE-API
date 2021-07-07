@@ -33,6 +33,4 @@ public class Partner {
     @Field(value = "time_slots")
     @DBRef
     private List<TimeSlot> timeSlots;
-    @Field(value = "photo_url")
-    private String photoUrl;
 }
