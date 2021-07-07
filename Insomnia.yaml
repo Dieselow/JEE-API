@@ -1,8 +1,49 @@
 _type: export
 __export_format: 4
-__export_date: 2021-07-05T15:14:28.676Z
-__export_source: insomnia.desktop.app:v2021.4.0
+__export_date: 2021-07-07T23:55:39.572Z
+__export_source: insomnia.desktop.app:v2020.5.2
 resources:
+  - _id: req_879ac907262b47aba56b19cbcd9e6d07
+    parentId: fld_72ab1ed349d34e5e89b3af679abe0dac
+    modified: 1625663298752
+    created: 1625180854919
+    url: "{{ _.url }}/utils/address/6%20rue%20madame%2077250"
+    name: test addr api
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication:
+      type: bearer
+      token: "{{ _.token }}"
+    metaSortKey: -1625180854919
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_72ab1ed349d34e5e89b3af679abe0dac
+    parentId: wrk_4937aa0f1af5435c90027f467c85fbfa
+    modified: 1625569023902
+    created: 1625569023902
+    name: utils
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1625569023902
+    _type: request_group
+  - _id: wrk_4937aa0f1af5435c90027f467c85fbfa
+    parentId: null
+    modified: 1620658040996
+    created: 1620658040996
+    name: Jee Api
+    description: ""
+    scope: collection
+    _type: workspace
   - _id: req_c2f0bb4b15cd4cb487c7fc49ff60f510
     parentId: fld_08e20f6646fa481397684f44d186bb84
     modified: 1625174773093
@@ -58,17 +99,9 @@ resources:
     environmentPropertyOrder: null
     metaSortKey: -1623400110700
     _type: request_group
-  - _id: wrk_4937aa0f1af5435c90027f467c85fbfa
-    parentId: null
-    modified: 1620658040996
-    created: 1620658040996
-    name: Jee Api
-    description: ""
-    scope: collection
-    _type: workspace
   - _id: req_1601c800eed945e0b90dabf0bfd9506a
     parentId: fld_08e20f6646fa481397684f44d186bb84
-    modified: 1624998398293
+    modified: 1625587299360
     created: 1623407078820
     url: "{{ _.url }}/users/role"
     name: add role
@@ -153,9 +186,9 @@ resources:
     _type: request
   - _id: req_c150c36c31e548fe9fe78b267c0e97f8
     parentId: fld_7ccbce22c1254ef9869228861e5132db
-    modified: 1624998356862
+    modified: 1625586049788
     created: 1623401406006
-    url: "{{ _.url }}/users/id/{{ _.id }}"
+    url: "{{ _.url }}/users/{{ _.id }}"
     name: by id
     description: ""
     method: GET
@@ -231,9 +264,9 @@ resources:
     _type: request
   - _id: req_2461fd8562064d88b482eb59c895998e
     parentId: fld_004a5eaf986b42e488b36873c934a1d3
-    modified: 1625498017920
+    modified: 1625699085029
     created: 1625394062127
-    url: "{{ _.url }}/timeslots/60de33b4a2b35a3b625f0263/reservation"
+    url: "{{ _.url }}/timeslots/{{ _.timeslotId }}/reservation"
     name: "reservation "
     description: ""
     method: POST
@@ -241,7 +274,7 @@ resources:
       mimeType: application/json
       text: |-
         {
-        	"owner": "60e1882a3ad87a713a6e26d5",
+        	"owner": "{{ _.id }}",
         	"invitedUsers": [
         		"julientest@gmail.com",
         		"maxou@gmail.com"
@@ -254,7 +287,7 @@ resources:
         id: pair_dfb1b25ca09842b89c2b3a62c997630b
     authentication:
       type: bearer
-      token: eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6Imp1bGllbkBnbWFpbC5jb20iLCJpZCI6IjYwZTE4ODJhM2FkODdhNzEzYTZlMjZkNSIsInJvbGVzIjpbeyJpZCI6IjYwOTkzZDY5NDkwNmQyOTg3YzdmMTRkYSIsInJvbGUiOiJVU0VSIn1dLCJpYXQiOjE2MjU0MTAyODEsImV4cCI6MTYyNTQxNTY4MX0.CAi-GQlC1BUC2P493oH7A-S60HbXbrTKhW9Q-4Fmzb6__6LSOCM7Tbgc1kHh1tbtWkxG1z2rFRn4SyHoNj6WGQ
+      token: "{{ _.token }}"
     metaSortKey: -1625431142701
     isPrivate: false
     settingStoreCookies: true
@@ -296,9 +329,9 @@ resources:
     _type: request_group
   - _id: req_8c1349965e0f47a5ac6188277f705766
     parentId: fld_004a5eaf986b42e488b36873c934a1d3
-    modified: 1625498016029
+    modified: 1625699349697
     created: 1625410417669
-    url: "{{ _.url }}/timeslots/60de33b4a2b35a3b625f0263/cancel"
+    url: "{{ _.url }}/timeslots/{{ _.timeslotId }}/reservation"
     name: update réservation
     description: ""
     method: PUT
@@ -306,18 +339,19 @@ resources:
       mimeType: application/json
       text: |-
         {
-        	"id": "60e1cb44ab6687295a89fea3",
-        	"owner":"60e1882a3ad87a713a6e26d5",
-        	"invitedUsers": ["julien@gmail.fr"]
+        	"owner": "{{ _.id }}",
+        	"invitedUsers": [
+        		"julien@gmail.fr"
+        	]
         }
     parameters: []
     headers:
       - name: Content-Type
         value: application/json
+        id: pair_a15f3ebc6b734b49acebb89d37607d16
     authentication:
       type: bearer
-      token: "{% response 'body', 'req_475a04d7ac8943c8bf74ed496fdc08db',
-        'b64::JC50b2tlbg==::46b', 'always', 60 %}"
+      token: "{{ _.token }}"
     metaSortKey: -1625431142651
     isPrivate: false
     settingStoreCookies: true
@@ -329,9 +363,9 @@ resources:
     _type: request
   - _id: req_a0ba4cb609de42639394c061d1cd390a
     parentId: fld_004a5eaf986b42e488b36873c934a1d3
-    modified: 1625498013768
+    modified: 1625668816485
     created: 1625431142601
-    url: "{{ _.url }}/reservation/60e1cb44ab6687295a89fea3"
+    url: "{{ _.url }}/timeslots/{{ _.timeslotId }}/reservation"
     name: delete
     description: ""
     method: DELETE
@@ -340,32 +374,8 @@ resources:
     headers: []
     authentication:
       type: bearer
-      token: "{% response 'body', 'req_475a04d7ac8943c8bf74ed496fdc08db',
-        'b64::JC50b2tlbg==::46b', 'always', 60 %}"
-    metaSortKey: -1625431142601
-    isPrivate: false
-    settingStoreCookies: true
-    settingSendCookies: true
-    settingDisableRenderRequestBody: false
-    settingEncodeUrl: true
-    settingRebuildPath: true
-    settingFollowRedirects: global
-    _type: request
-  - _id: req_879ac907262b47aba56b19cbcd9e6d07
-    parentId: fld_c9f7219d7b5d48388a3e1b6a4cb5d715
-    modified: 1625181875447
-    created: 1625180854919
-    url: "{{ _.url }}/timeslots/test/6%20rue%20madame%2077250"
-    name: test addr api
-    description: ""
-    method: GET
-    body: {}
-    parameters: []
-    headers: []
-    authentication:
-      type: bearer
       token: "{{ _.token }}"
-    metaSortKey: -1625180854919
+    metaSortKey: -1625431142601
     isPrivate: false
     settingStoreCookies: true
     settingSendCookies: true
@@ -376,7 +386,7 @@ resources:
     _type: request
   - _id: req_7a11ac9616f24f5ca5dcfefbc775645a
     parentId: fld_c9f7219d7b5d48388a3e1b6a4cb5d715
-    modified: 1625177963557
+    modified: 1625701457268
     created: 1623430290618
     url: "{{ _.url }}/partner/{{ _.partnerId }}/timeslots"
     name: create slot
@@ -386,8 +396,8 @@ resources:
       mimeType: application/json
       text: |-
         {
-        	"startDate": 1629454382,
-        	"endDate": 1629484682,
+        	"startDate": 1629484382,
+        	"endDate": 16294104682,
         	"seats": 4
         }
     parameters: []
@@ -398,7 +408,87 @@ resources:
     authentication:
       type: bearer
       token: "{{ _.token }}"
-    metaSortKey: -1623695600221.5
+    metaSortKey: -1624809541282.125
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_9741dec64c6a4df2a27427d1918663b7
+    parentId: fld_c9f7219d7b5d48388a3e1b6a4cb5d715
+    modified: 1625673359705
+    created: 1623434580111
+    url: "{{ _.url }}/partner/{{ _.partnerId }}/timeslots/range"
+    name: create slot by range
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"startDate": 1629454382,
+        	"endDate": 1629484682,
+        	"seats": 4,
+        	"duration": 1000000
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_946b200a13ef4837bf763005f8abd08b
+    authentication:
+      type: bearer
+      token: "{{ _.token }}"
+    metaSortKey: -1624623884438.6875
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_fc609dfcb3624b07a6f8e1f1032892e1
+    parentId: fld_c9f7219d7b5d48388a3e1b6a4cb5d715
+    modified: 1625670604627
+    created: 1625568900653
+    url: "{{ _.url }}/timeslots/{{ _.timeslotId }}"
+    name: by id
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication:
+      type: bearer
+      token: "{{ _.token }}"
+    metaSortKey: -1624438227595.25
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_4900122338d0422c8fd779819e405894
+    parentId: fld_c9f7219d7b5d48388a3e1b6a4cb5d715
+    modified: 1625672713825
+    created: 1625660556790
+    url: "{{ _.url }}/timeslots/reservation/{{ _.id }}"
+    name: by user of reservation
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication:
+      type: bearer
+      token: "{{ _.token }}"
+    metaSortKey: -1624066913908.375
     isPrivate: false
     settingStoreCookies: true
     settingSendCookies: true
@@ -409,7 +499,7 @@ resources:
     _type: request
   - _id: req_79b0d369030440139785ccb59e235c7e
     parentId: fld_c9f7219d7b5d48388a3e1b6a4cb5d715
-    modified: 1625177973557
+    modified: 1625663525360
     created: 1623956620332
     url: "{{ _.url }}/partner/{{ _.partnerId }}/timeslots"
     name: available slots of partner
@@ -421,44 +511,7 @@ resources:
     authentication:
       type: bearer
       token: "{{ _.token }}"
-    metaSortKey: -1623565090166.25
-    isPrivate: false
-    settingStoreCookies: true
-    settingSendCookies: true
-    settingDisableRenderRequestBody: false
-    settingEncodeUrl: true
-    settingRebuildPath: true
-    settingFollowRedirects: global
-    _type: request
-  - _id: req_9741dec64c6a4df2a27427d1918663b7
-    parentId: fld_c9f7219d7b5d48388a3e1b6a4cb5d715
-    modified: 1625175273035
-    created: 1623434580111
-    url: "{{ _.url }}/partner/timeslotRange"
-    name: range
-    description: ""
-    method: POST
-    body:
-      mimeType: application/json
-      text: |-
-        {
-        	"timeSlot": {
-        		"startDate": ,
-        		"endDate": ,
-        		"duration": 100000,
-        		"seats": 4,
-        	},
-        	"partnerId" : "60c3a501279e383446f8019a"
-        }
-    parameters: []
-    headers:
-      - name: Content-Type
-        value: application/json
-        id: pair_946b200a13ef4837bf763005f8abd08b
-    authentication:
-      type: bearer
-      token: "{{ _.token }}"
-    metaSortKey: -1623434580111
+    metaSortKey: -1623881257064.9375
     isPrivate: false
     settingStoreCookies: true
     settingSendCookies: true
@@ -492,10 +545,10 @@ resources:
     _type: request
   - _id: req_485bfebf088f47a5adb942651b54bf5d
     parentId: fld_f9c10e845f924550bf2925336d044283
-    modified: 1625174168943
+    modified: 1625701730701
     created: 1623415548404
-    url: "{{ _.url }}/partner/{{ _.id }}"
-    name: your partner places
+    url: "{{ _.url }}/partner/user/{{ _.id }}"
+    name: partner by user
     description: ""
     method: GET
     body: {}
@@ -513,9 +566,32 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
+  - _id: req_b3edb1865cba4e62be64cbd6a10a996b
+    parentId: fld_f9c10e845f924550bf2925336d044283
+    modified: 1625701741904
+    created: 1625701713104
+    url: "{{ _.url }}/partner/{{ _.partnerId }}"
+    name: partner by id
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication:
+      type: bearer
+      token: "{{ _.token }}"
+    metaSortKey: -1623411317718
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
   - _id: req_480e5b5fb7fb40f7a75b82ca4c3513c3
     parentId: fld_f9c10e845f924550bf2925336d044283
-    modified: 1625401824939
+    modified: 1625660385932
     created: 1623399095619
     url: "{{ _.url }}/partner"
     name: partner
@@ -523,13 +599,14 @@ resources:
     method: POST
     body:
       mimeType: application/json
-      text: |-
+      text: >-
         {
         	"partner": {
-        		"name": "L'esco-bar",
-        		"phoneNumber": "+33610973240"
+        		"name": "Bar-mitsva",
+        		"phoneNumber": "+33610973240",
+        		"photoUrl": "https://images.unsplash.com/photo-1572116469696-31de0f17cc34?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1934&q=80"
         	},
-        	"address": "6 rue madame 77250 france",
+        	"address": "2 rue grande 77300 france",
         	"userId": "{{ _.id }}"
         }
     parameters: []
@@ -551,7 +628,7 @@ resources:
     _type: request
   - _id: req_475a04d7ac8943c8bf74ed496fdc08db
     parentId: fld_c95484e525074e52acd8ba733de367ea
-    modified: 1625340613100
+    modified: 1625699584864
     created: 1620658080079
     url: "{{ _.url }}/auth/login"
     name: login
@@ -603,7 +680,7 @@ resources:
     _type: request_group
   - _id: req_1e837122d985424c977522d614a21b84
     parentId: fld_c95484e525074e52acd8ba733de367ea
-    modified: 1625397473343
+    modified: 1625700876664
     created: 1620658073042
     url: "{{ _.url }}/auth/register"
     name: register
@@ -634,9 +711,9 @@ resources:
     _type: request
   - _id: req_e697dd71c2e44585892b5b79cc7ccdfd
     parentId: wrk_4937aa0f1af5435c90027f467c85fbfa
-    modified: 1623417266869
+    modified: 1625670635799
     created: 1620658283428
-    url: "{{ _.url }}/welcome"
+    url: "{{ _.url }}/users{{ _.url }}/timeslots/{{ _.timeslotId }}"
     name: welcome
     description: ""
     method: GET
@@ -681,17 +758,17 @@ resources:
     _type: api_spec
   - _id: env_5460573e5ca7410f81ca33b29a143014
     parentId: env_5a0495dc32871ceaba81fd7a723228f0763b1915
-    modified: 1625495330551
+    modified: 1625701568235
     created: 1620658089396
     name: Jee Api Dev
     data:
       url: http://127.0.0.1:3001/api/v1
-      token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqdWxpZW5AZ21haWwuY29tIiwiaWQiOiI2MGUxODgyYTNhZDg3YTcxM2E2ZTI2ZDUiLCJyb2xlcyI6W3siaWQiOiI2MGE0MmEyNjYyOTVhYjEzN2Q4OTM3NDgiLCJyb2xlIjoiUEFSVE5FUiJ9XSwiaWF0IjoxNjI1NDk1MzA0LCJleHAiOjE2MjU1ODE3MDR9.Zg0rVamjvTPsjBs2VZBSnrysXDiyb6MRmK6eZ1cbPRCa6T9_IWQ-uCkyRY9YWY95Ov44DQEZV6quJSTU7u6c_w
-      email: julien@gmail.com
-      password: azerty
-      id: 60e1882a3ad87a713a6e26d5
-      partnerId: 60de3282ab30a968256c88d4
-      timeslotId: 60db85c6c0bfe56f42843152
+      token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0aW5nN0BnbWFpbC5jb20iLCJpZCI6IjYwZTYzYjY0N2FkNTliNWZmNTkwYmUwNCIsInJvbGVzIjpbeyJpZCI6IjYwOTkzZDY5NDkwNmQyOTg3YzdmMTRkYSIsInJvbGUiOiJVU0VSIn1dLCJpYXQiOjE2MjU3MDEyNzMsImV4cCI6MTYyNTc4NzY3M30.Xy5RcurfmLD1_RgG6B8Hy24qfgggnAHvhtniYKTAIdVOGP1yNQdmBxmVo2WQ8QMHV75j09Q5lHCcDIUl0Ngl3Q
+      email: testing7@gmail.com
+      password: testingPassword
+      id: 60e63b647ad59b5ff590be04
+      partnerId: 60e63bd9392149534e70b954
+      timeslotId: 60e63c531def7d0e99799bb3
     dataPropertyOrder:
       "&":
         - url
