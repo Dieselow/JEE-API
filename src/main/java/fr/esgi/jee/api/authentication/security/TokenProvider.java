@@ -1,6 +1,5 @@
 package fr.esgi.jee.api.authentication.security;
 
-import fr.esgi.jee.api.authentication.login.Role;
 import fr.esgi.jee.api.users.domain.User;
 import fr.esgi.jee.api.users.domain.UserServiceImpl;
 import io.jsonwebtoken.*;
