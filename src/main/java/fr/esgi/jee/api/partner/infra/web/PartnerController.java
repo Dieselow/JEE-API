@@ -44,10 +44,19 @@ public class PartnerController {
         return new ResponseEntity<>(partners, HttpStatus.OK);
     }
 
-    @GetMapping("{id}")
+    @GetMapping("user/{id}")
     public ResponseEntity<List<Partner>> getPartnersFromUserId(@PathVariable String id) {
         List<Partner> partners = partnerService.findByOwnerId(id);
         return new ResponseEntity<>(partners, HttpStatus.OK);
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<Partner> findById(@PathVariable String id) {
+        Optional<Partner> partner = partnerService.findById(id);
+        if(!partner.isPresent()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "partner not found");
+        }
+        return new ResponseEntity<>(partner.get(), HttpStatus.OK);
     }
 
     @PostMapping("{partnerId}/timeslots")
@@ -70,6 +79,19 @@ public class PartnerController {
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
+    @PostMapping("{partnerId}/timeslots/range")
+    public ResponseEntity<List<TimeSlot>> addTimeSlotByRange(@RequestBody CreateTimeSlotRangeDTO createTimeSlotRangeDTO) {
+
+
+        if(createTimeSlotRangeDTO.getStartDate() < System.currentTimeMillis()){
+
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "can't add a timeslot in the past");
+        }
+
+        List<TimeSlot> createdSlots = timeSlotService.createTimeSlotByRange(createTimeSlotRangeDTO);
+        return new ResponseEntity<>(createdSlots, HttpStatus.CREATED);
+    }
+
     @GetMapping("{id}/timeslots")
     public ResponseEntity<List<TimeSlot>> getAvailableTimeSlots(@PathVariable String id) {
 
@@ -86,44 +108,6 @@ public class PartnerController {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "partner not found");
     }
 
-    @PostMapping("timeslotRange")
-    public ResponseEntity<List<TimeSlot>> addTimeSlotByRange(@RequestBody CreateTimeSlotRangeDTO createTimeSlotRangeDTO) {
 
-
-        if(createTimeSlotRangeDTO.getStartDate() < System.currentTimeMillis()){
-
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "can't add a timeslot in the past");
-        }
-
-        List<TimeSlot> createdSlots = timeSlotService.createTimeSlotByRange(createTimeSlotRangeDTO);
-        return new ResponseEntity<>(createdSlots, HttpStatus.CREATED);
-    }
-
-    @GetMapping("{id}/prettifySlotDate")
-    public ResponseEntity<List<Map<String,String>>> test(@PathVariable String id) {
-        Optional<Partner> partner = partnerService.findById(id);
-        if (partner.isPresent()){
-            List slots = partner
-                    .get()
-                    .getTimeSlots()
-                    .stream()
-                    .filter(t -> t.getReservation().equals(null) && t.getStartDate() > System.currentTimeMillis())
-                    .map(p -> {
-                        Map<String, String> res = new HashMap<>();
-
-                        var start = new Date(p.getStartDate());
-                        var end = new Date(p.getEndDate());
-
-                        res.put("start", start.toString());
-                        res.put("end", end.toString());
-
-                        return res;
-                    })
-                    .collect(Collectors.toList());
-            return new ResponseEntity<>(slots, HttpStatus.OK);
-        }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "partner not found");
-
-    }
 }
 

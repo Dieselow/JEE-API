@@ -7,5 +7,4 @@ import java.util.List;
 public interface TimeSlotService {
     TimeSlot createTimeSlot(TimeSlot timeSlot, String partnerId);
     List<TimeSlot> createTimeSlotByRange(CreateTimeSlotRangeDTO createTimeSlotRangeDTO);
-    TimeSlot cancelReservation(String id);
 }

@@ -11,12 +11,8 @@ import java.util.Date;
 @Data
 @Builder
 public class CreateTimeSlotRangeDTO {
-
     public long startDate;
-
     public long endDate;
-
-    public int slotDurationMin;
     public int seats;
-    public String partnerId;
+    public int duration;
 }

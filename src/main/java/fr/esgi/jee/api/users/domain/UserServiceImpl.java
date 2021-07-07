@@ -2,44 +2,53 @@ package fr.esgi.jee.api.users.domain;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import fr.esgi.jee.api.authentication.login.LoginDTO;
-import fr.esgi.jee.api.authentication.login.Role;
-import fr.esgi.jee.api.authentication.login.RoleRepository;
+import fr.esgi.jee.api.authentication.domain.AuthenticationService;
+import fr.esgi.jee.api.authentication.domain.login.LoginDTO;
+import fr.esgi.jee.api.authentication.domain.login.Role;
+import fr.esgi.jee.api.authentication.domain.login.RoleRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final PasswordEncoder bCryptEncoder;
+    private final AuthenticationService authenticationService;
 
+    @Autowired
+    private Pbkdf2PasswordEncoder encoder;
     /**
      * Constructor Injection
      * better than @Autowired
      */
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder encoder) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, AuthenticationService authenticationService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
-        this.bCryptEncoder = encoder;
+        this.authenticationService = authenticationService;
     }
 
     @Override
-    public User addUser(User user) {
+    public User addUser(User user) throws NoSuchAlgorithmException {
         Role userRole = roleRepository.findByRole("USER");
         return userRepository.save(
                 User.builder()
                         .firstName(user.getFirstName())
                         .lastName(user.getLastName())
                         .email(user.getEmail())
-                        .password(this.bCryptEncoder.encode(user.getPassword()))
+                        .password(authenticationService.hash(user.getPassword()))
                         .phoneNumber(user.getPhoneNumber())
                         .createDate(new Date())
                         .closeDate(null)
@@ -109,7 +118,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         if(newUser.getPartners() != null)
             finalUser.setPartners(newUser.getPartners());
         if(newUser.getPassword() != null)
-            finalUser.setPassword(this.bCryptEncoder.encode(newUser.getPassword()));
+            finalUser.setPassword(encoder.encode(newUser.getPassword()));
         return finalUser;
     }
 
@@ -145,8 +154,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return findUserById(json.get("id").getAsString());
     }
 
-    public boolean checkUserLogin(LoginDTO login){
+    public boolean checkUserLogin(LoginDTO login) throws NoSuchAlgorithmException {
         User user = findUserByEmail(login.getEmail());
-        return user != null && bCryptEncoder.matches(login.getPassword(), user.getPassword());
+
+        if(user == null){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "user not found from email");
+        }
+
+        if(!user.getPassword().equals(authenticationService.hash(login.getPassword()))){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "wrong password");
+        }
+        return true;
     }
 }
