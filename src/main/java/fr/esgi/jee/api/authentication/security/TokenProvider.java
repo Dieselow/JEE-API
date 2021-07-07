@@ -12,9 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.Duration;
 import java.util.Date;
-import java.util.Set;
 
 @Component
 public class TokenProvider {
@@ -29,8 +27,7 @@ public class TokenProvider {
     private UserServiceImpl userService;
 
     public String createToken(User user) {
-        Claims claims = Jwts.claims();
-        claims.put("email", user.getEmail());
+        Claims claims = Jwts.claims().setSubject(user.getEmail());
         claims.put("id", user.getId());
         claims.put("roles", user.getRoles());
 
@@ -46,7 +43,8 @@ public class TokenProvider {
 
     public Authentication getAuthentication(String token) {
         Claims claims = parseToken(token).getBody();
-        UserDetails userDetails = this.userService.loadUserByUsername(claims.get("email").toString());
+        UserDetails userDetails = this.userService.loadUserByUsername(claims.getSubject());
+
         return new UsernamePasswordAuthenticationToken(userDetails, token, userDetails.getAuthorities());
     }
 
@@ -69,6 +67,7 @@ public class TokenProvider {
             Jws<Claims> claims = Jwts.parser().setSigningKey(this.secretKey).parseClaimsJws(token);
             return !claims.getBody().getExpiration().before(new Date());
         } catch (JwtException | IllegalArgumentException e) {
+            e.printStackTrace();
             throw new JwtException("Expired or invalid JWT token");
         }
     }

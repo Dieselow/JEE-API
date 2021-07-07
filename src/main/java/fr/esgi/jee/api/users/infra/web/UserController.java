@@ -44,7 +44,7 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    @GetMapping("id/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<User> getUserById(@PathVariable String id) {
         try {
             User user = userService.findUserById(id);
@@ -73,14 +73,14 @@ public class UserController {
                     updatedUser = userService.addRole(editRoleDTO.getUser(), editRoleDTO.getRole());
                     break;
                 case REMOVE:
-                    updatedUser = userService.removeRole(editRoleDTO.getUser(), editRoleDTO.getRole());
+                    updatedUser = userService.removeRole(editRoleDTO.getUser());
                     break;
                 default:
                     throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wrong action type");
             }
             return new ResponseEntity<>(updatedUser, HttpStatus.OK);
         } catch (Exception e) {
-            System.out.println(e.getStackTrace().toString());
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

@@ -1,14 +1,14 @@
 package fr.esgi.jee.api.integration;
 
-        import net.minidev.json.JSONObject;
-        import org.hamcrest.Matchers;
-        import org.junit.Test;
-        import org.junit.runner.RunWith;
-        import org.springframework.beans.factory.annotation.Value;
-        import org.springframework.boot.test.context.SpringBootTest;
-        import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import net.minidev.json.JSONObject;
+import org.hamcrest.Matchers;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-        import static io.restassured.RestAssured.*;
+import static io.restassured.RestAssured.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)

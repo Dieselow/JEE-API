@@ -1,6 +1,6 @@
 package fr.esgi.jee.api.users.domain;
 
-import fr.esgi.jee.api.authentication.login.Role;
+import fr.esgi.jee.api.authentication.domain.login.Role;
 import fr.esgi.jee.api.partner.domain.Partner;
 import lombok.Builder;
 import lombok.Data;
@@ -10,9 +10,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.time.LocalDate;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 
