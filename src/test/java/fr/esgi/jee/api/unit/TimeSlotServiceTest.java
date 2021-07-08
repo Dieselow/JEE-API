@@ -1,4 +1,4 @@
-package fr.esgi.jee.api;
+package fr.esgi.jee.api.unit;
 
 import fr.esgi.jee.api.partner.domain.timeslot.TimeSlot;
 import fr.esgi.jee.api.partner.domain.timeslot.TimeSlotServiceImpl;
