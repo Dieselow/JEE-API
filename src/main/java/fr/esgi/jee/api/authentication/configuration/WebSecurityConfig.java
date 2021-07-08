@@ -5,6 +5,7 @@ import fr.esgi.jee.api.authentication.security.TokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -12,6 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 
 @Configuration
 @EnableWebSecurity
@@ -32,7 +34,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/welcome").permitAll()
-                .antMatchers("/users").permitAll()
+                .antMatchers(HttpMethod.GET, "/partner*").permitAll()
+                .antMatchers(HttpMethod.GET, "/partner/*/timeslots").permitAll()
+                .antMatchers(HttpMethod.POST, "/partner").hasAuthority("PARTNER")
+                .antMatchers(HttpMethod.GET, "/reservation*").permitAll()
+                .antMatchers(HttpMethod.POST, "/timeslot/*/reservation").hasAuthority("PARTNER")
+                .antMatchers(HttpMethod.DELETE, "/reservation/*").hasAuthority("PARTNER")
                 .anyRequest()
                 .authenticated()
                 .and()

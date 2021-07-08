@@ -1,6 +1,6 @@
 package fr.esgi.jee.api.authentication.security;
 
-import fr.esgi.jee.api.authentication.login.Role;
+import fr.esgi.jee.api.users.domain.User;
 import fr.esgi.jee.api.users.domain.UserServiceImpl;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,20 +11,24 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.Duration;
 import java.util.Date;
-import java.util.Set;
 
 @Component
 public class TokenProvider {
 
     @Value("${security.token.secret}")
     private String secretKey;
-    private final long tokenValidityInMilliseconds = Duration.ofMinutes(600).getSeconds() * 1000;
 
-    public String createToken(String username, Set<Role> set) {
-        Claims claims = Jwts.claims().setSubject(username);
-        claims.put("roles", set);
+    @Value("${security.token.ttl.milliseconds}")
+    private long tokenValidityInMilliseconds;
+
+    @Autowired
+    private UserServiceImpl userService;
+
+    public String createToken(User user) {
+        Claims claims = Jwts.claims().setSubject(user.getEmail());
+        claims.put("id", user.getId());
+        claims.put("roles", user.getRoles());
 
         Date validity = new Date((new Date()).getTime() + this.tokenValidityInMilliseconds);
 
@@ -36,9 +40,14 @@ public class TokenProvider {
                 .compact();
     }
 
+    public Authentication getAuthentication(String token) {
+        Claims claims = parseToken(token).getBody();
+        UserDetails userDetails = this.userService.loadUserByUsername(claims.getSubject());
 
+        return new UsernamePasswordAuthenticationToken(userDetails, token, userDetails.getAuthorities());
+    }
 
-    public Jws<Claims> parseToken(String authToken) {
+    private Jws<Claims> parseToken(String authToken) {
         return Jwts.parser()
                 .setSigningKey(this.secretKey)
                 .parseClaimsJws(authToken);
@@ -57,6 +66,7 @@ public class TokenProvider {
             Jws<Claims> claims = Jwts.parser().setSigningKey(this.secretKey).parseClaimsJws(token);
             return !claims.getBody().getExpiration().before(new Date());
         } catch (JwtException | IllegalArgumentException e) {
+            e.printStackTrace();
             throw new JwtException("Expired or invalid JWT token");
         }
     }
