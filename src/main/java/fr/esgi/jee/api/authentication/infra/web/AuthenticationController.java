@@ -7,6 +7,9 @@ import fr.esgi.jee.api.users.domain.User;
 import fr.esgi.jee.api.users.domain.UserServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,21 +25,27 @@ public class AuthenticationController {
 
     private final TokenProvider tokenProvider;
     private final UserServiceImpl userService;
+    private final AuthenticationManagerBuilder authenticationManager;
 
     public AuthenticationController(TokenProvider tokenProvider,
-                                    UserServiceImpl userService) {
+                                    UserServiceImpl userService,
+                                    AuthenticationManagerBuilder authenticationManager) {
         this.tokenProvider = tokenProvider;
         this.userService = userService;
+        this.authenticationManager = authenticationManager;
     }
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginDTO loginDTO) throws NoSuchAlgorithmException, InvalidKeySpecException {
 
-        if(!this.userService.checkUserLogin(loginDTO)){
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "wrong login or password");
-        }
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                loginDTO.getEmail(),
+                loginDTO.getPassword());
 
-        String token = tokenProvider.createToken(this.userService.findUserByEmail(loginDTO.getEmail()));
+
+        Authentication authentication = authenticationManager.getObject().authenticate(authenticationToken);
+
+        String token = tokenProvider.createToken(authentication);
 
         LoginResponseDTO response = new LoginResponseDTO();
         response.setToken(token);
