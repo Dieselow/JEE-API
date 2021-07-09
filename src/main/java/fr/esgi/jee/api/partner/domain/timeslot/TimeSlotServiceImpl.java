@@ -3,14 +3,11 @@ package fr.esgi.jee.api.partner.domain.timeslot;
 import fr.esgi.jee.api.partner.domain.PartnerServiceImpl;
 import fr.esgi.jee.api.partner.domain.timeslot.reservation.Reservation;
 import fr.esgi.jee.api.partner.infra.dto.CreateTimeSlotRangeDTO;
-import fr.esgi.jee.api.users.domain.User;
-import fr.esgi.jee.api.users.domain.UserServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +27,7 @@ public class TimeSlotServiceImpl implements TimeSlotService {
     }
 
     @Override
-    public TimeSlot createTimeSlot(TimeSlot timeSlot, String partnerId) {
+    public TimeSlot createTimeSlot(TimeSlot timeSlot) {
         TimeSlot createdTimeSlot = timeSlotRepository.save(
                 TimeSlot.builder()
                         .startDate(timeSlot.getStartDate())
@@ -39,29 +36,24 @@ public class TimeSlotServiceImpl implements TimeSlotService {
                         .reservation(null)
                         .build()
         );
-
-        List<TimeSlot> slots = new ArrayList<>();
-        slots.add(createdTimeSlot);
-        partnerService.addTimeSlots(slots, partnerId);
         return createdTimeSlot;
     }
 
     @Override
-    public List<TimeSlot> createTimeSlotByRange(CreateTimeSlotRangeDTO createTimeSlotRangeDTO) {
+    public List<TimeSlot> buildTimeSlotByRange(CreateTimeSlotRangeDTO createTimeSlotRangeDTO) {
 
         List<TimeSlot> timeSlots = new ArrayList<>();
-        final long slotDuration = (long) createTimeSlotRangeDTO.getDuration() * 60 * 1000;
 
-        System.out.println(createTimeSlotRangeDTO);
-        System.out.println(createTimeSlotRangeDTO.getEndDate());
-        System.out.println(slotDuration);
-
-        for (long t = createTimeSlotRangeDTO.getStartDate(); t + slotDuration < createTimeSlotRangeDTO.getEndDate() ; t+=slotDuration) {
-            System.out.println(new Date(t));
+        for (long t = createTimeSlotRangeDTO.getStartDate(); t + createTimeSlotRangeDTO.getDuration() < createTimeSlotRangeDTO.getEndDate() ; t += createTimeSlotRangeDTO.getDuration() + createTimeSlotRangeDTO.getPause()) {
+            timeSlots.add(
+                    TimeSlot.builder()
+                        .startDate(t)
+                        .endDate(t + createTimeSlotRangeDTO.getDuration() - 1)
+                        .seats(createTimeSlotRangeDTO.getSeats())
+                        .reservation(null)
+                        .build()
+            );
         }
-
-        //partnerService.addTimeSlots(timeSlots, partner);
-
         return timeSlots;
     }
 

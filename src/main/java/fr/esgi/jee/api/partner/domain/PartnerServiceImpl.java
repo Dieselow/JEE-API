@@ -74,9 +74,7 @@ public class PartnerServiceImpl implements PartnerService {
         Optional<Partner> optionalPartner = this.findById(partnerId);
         if(optionalPartner.isPresent()){
             Partner dbPartner = optionalPartner.get();
-            List<TimeSlot> slots = dbPartner.getTimeSlots();
-            slots.addAll(timeSlots);
-            dbPartner.setTimeSlots(slots);
+            dbPartner.getTimeSlots().addAll(timeSlots);
             partnerRepository.save(dbPartner);
             return dbPartner;
         }

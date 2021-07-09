@@ -15,4 +15,5 @@ public class CreateTimeSlotRangeDTO {
     public long endDate;
     public int seats;
     public int duration;
+    public int pause;
 }

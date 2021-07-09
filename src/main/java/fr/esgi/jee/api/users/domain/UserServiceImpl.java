@@ -2,7 +2,6 @@ package fr.esgi.jee.api.users.domain;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import fr.esgi.jee.api.authentication.domain.AuthenticationService;
 import fr.esgi.jee.api.authentication.domain.login.Role;
 import fr.esgi.jee.api.authentication.domain.login.RoleRepository;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,21 +18,26 @@ import java.util.*;
 public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final AuthenticationService authenticationService;
     private final PasswordEncoder bCryptEncoder;
 
 
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, AuthenticationService authenticationService, PasswordEncoder bCryptEncoder) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder bCryptEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
-        this.authenticationService = authenticationService;
         this.bCryptEncoder = bCryptEncoder;
     }
 
     @Override
     public User addUser(User user) {
-        String role = user.getRoles().iterator().next().getRole();
+
+        String role;
+        try {
+            role = user.getRoles().iterator().next().getRole();
+        }catch (Exception e){
+            role = "USER";
+        }
         Role userRole = roleRepository.findByRole(role);
+
         return userRepository.save(
                 User.builder()
                         .firstName(user.getFirstName())
