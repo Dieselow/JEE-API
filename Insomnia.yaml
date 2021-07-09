@@ -1,6 +1,6 @@
 _type: export
 __export_format: 4
-__export_date: 2021-07-09T01:13:15.482Z
+__export_date: 2021-07-09T11:34:33.783Z
 __export_source: insomnia.desktop.app:v2020.5.2
 resources:
   - _id: req_879ac907262b47aba56b19cbcd9e6d07
@@ -419,7 +419,7 @@ resources:
     _type: request
   - _id: req_9741dec64c6a4df2a27427d1918663b7
     parentId: fld_c9f7219d7b5d48388a3e1b6a4cb5d715
-    modified: 1625790602970
+    modified: 1625826933931
     created: 1623434580111
     url: "{{ _.url }}/partner/{{ _.partnerId }}/timeslots/range"
     name: create slot by range
@@ -429,12 +429,12 @@ resources:
       mimeType: application/json
       text: |-
         {
-        	"startDate": 1629484382,
-        	"endDate": 1629494682,
-        	"seats": 4,
-        	"duration": 1000,
-        	"pause": 60
-        }
+        	"startDate": 1628504334,
+        	"endDate": 1628540334,
+        	"seats": 5,
+        	"duration": 1800,
+        	"pause": 300
+        }	
     parameters: []
     headers:
       - name: Content-Type
@@ -500,9 +500,9 @@ resources:
     _type: request
   - _id: req_79b0d369030440139785ccb59e235c7e
     parentId: fld_c9f7219d7b5d48388a3e1b6a4cb5d715
-    modified: 1625663525360
+    modified: 1625828393935
     created: 1623956620332
-    url: "{{ _.url }}/partner/{{ _.partnerId }}/timeslots"
+    url: "{{ _.url }}/partner/{{ _.partnerId }}/timeslots/available"
     name: available slots of partner
     description: ""
     method: GET
@@ -521,9 +521,32 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
+  - _id: req_5ded7baffefa401c8eeee65b48b606c1
+    parentId: fld_c9f7219d7b5d48388a3e1b6a4cb5d715
+    modified: 1625827668103
+    created: 1625827668103
+    url: "{{ _.url }}/partner/{{ _.partnerId }}/timeslots"
+    name: all slots of partner
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication:
+      type: bearer
+      token: "{{ _.token }}"
+    metaSortKey: -1623648487610.9688
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
   - _id: req_b15384d8f5a14f2e81e557504897d66c
     parentId: fld_f9c10e845f924550bf2925336d044283
-    modified: 1625177998089
+    modified: 1625818499932
     created: 1623415718157
     url: "{{ _.url }}/partner"
     name: all partners
@@ -534,7 +557,7 @@ resources:
     headers: []
     authentication:
       type: bearer
-      token: "{{ _.token }}"
+      token: ""
     metaSortKey: -1623415718157
     isPrivate: false
     settingStoreCookies: true
@@ -592,7 +615,7 @@ resources:
     _type: request
   - _id: req_480e5b5fb7fb40f7a75b82ca4c3513c3
     parentId: fld_f9c10e845f924550bf2925336d044283
-    modified: 1625660385932
+    modified: 1625826382384
     created: 1623399095619
     url: "{{ _.url }}/partner"
     name: partner
@@ -600,14 +623,14 @@ resources:
     method: POST
     body:
       mimeType: application/json
-      text: >-
+      text: |-
         {
         	"partner": {
-        		"name": "Bar-mitsva",
+        		"name": "ESGI",
         		"phoneNumber": "+33610973240",
-        		"photoUrl": "https://images.unsplash.com/photo-1572116469696-31de0f17cc34?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1934&q=80"
+        		"photoUrl": "https://www.esgi.fr/images/news/ESGI_Nation_500.jpg"
         	},
-        	"address": "2 rue grande 77300 france",
+        	"address": "242 rue faubourg saint-antoine 75012",
         	"userId": "{{ _.id }}"
         }
     parameters: []
@@ -681,7 +704,7 @@ resources:
     _type: request_group
   - _id: req_1e837122d985424c977522d614a21b84
     parentId: fld_c95484e525074e52acd8ba733de367ea
-    modified: 1625791874516
+    modified: 1625818040995
     created: 1620658073042
     url: "{{ _.url }}/auth/register"
     name: register
@@ -696,7 +719,7 @@ resources:
         	"password": "{{ _.password }}",
         	"roles": [
         		{
-        			"role": "USER"
+        			"role": "PARTNER"
         		}
         	]
         }
@@ -717,9 +740,9 @@ resources:
     _type: request
   - _id: req_e697dd71c2e44585892b5b79cc7ccdfd
     parentId: wrk_4937aa0f1af5435c90027f467c85fbfa
-    modified: 1625670635799
+    modified: 1625817756145
     created: 1620658283428
-    url: "{{ _.url }}/users{{ _.url }}/timeslots/{{ _.timeslotId }}"
+    url: "{{ _.url }}/welcome"
     name: welcome
     description: ""
     method: GET
@@ -764,16 +787,16 @@ resources:
     _type: api_spec
   - _id: env_5460573e5ca7410f81ca33b29a143014
     parentId: env_5a0495dc32871ceaba81fd7a723228f0763b1915
-    modified: 1625792474622
+    modified: 1625828373431
     created: 1620658089396
     name: Jee Api Dev
     data:
       url: http://127.0.0.1:3001/api/v1
-      token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYXhpbWUuZGhhcmJvdWxsZTNAZ21haWwuY29tIiwicm9sZSI6IlBBUlRORVIiLCJpZCI6IjYwZTczMjIxMjY2MTA4MDk1ZTI2NjFkYyIsImlhdCI6MTYyNTc4MzczNiwiZXhwIjoxNjI1ODcwMTM2fQ.LHfQeef6HmqVSXwrpP3Pu_9qQ3pvCZxa4S6OL3MxXSfGrH1CVqZuIP4IIqYDymPFqDlMwn_nExt2dSN9SXd3hw
-      email: maxime.dharboulle3@gmail.com
+      token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYXhpbWUuZGhhcmJvdWxsZTExQGdtYWlsLmNvbSIsInJvbGUiOiJQQVJUTkVSIiwiaWQiOiI2MGU4MDU0Nzg2Y2ZiOTBhYjg1YjFmNmYiLCJpYXQiOjE2MjU4MjU4OTIsImV4cCI6MTYyNTgzMTI5Mn0.3FmsOw5S-h2jzwCYZY47Wew3vjkyLfiScDDzaydwrhbJrVVXqLBh4Yxm9dW5BwNHWR-4FDgl3BEIAtkfLnCdFA
+      email: maxime.dharboulle11@gmail.com
       password: password
-      id: 60e73221266108095e2661dc
-      partnerId: 60e73243266108095e2661dd
+      id: 60e8054786cfb90ab85b1f6f
+      partnerId: 60e8245086cfb90ab85b1f8d
       timeslotId: 60e641a495f28e1f73dff8de
     dataPropertyOrder:
       "&":
@@ -790,17 +813,17 @@ resources:
     _type: environment
   - _id: env_09793b09773d4590b3c2a6e2dd2f205e
     parentId: env_5a0495dc32871ceaba81fd7a723228f0763b1915
-    modified: 1625758841718
+    modified: 1625827729559
     created: 1623427868545
     name: Jee Api Prod
     data:
       url: http://20.79.84.247/api/v1
-      token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYXhpbWUuZGhhcmJvdWxsZUBnbWFpbC5jb20iLCJpZCI6IjYwZTY0MTQ2OTVmMjhlMWY3M2RmZjhkOSIsInJvbGVzIjpbeyJpZCI6IjYwOTkzZDY5NDkwNmQyOTg3YzdmMTRkYSIsInJvbGUiOiJVU0VSIn1dLCJpYXQiOjE2MjU3MDI3MzIsImV4cCI6MTYyNTc4OTEzMn0.QBBheb-uPycTdlKjp_WPq5hFIrougZCP3VEaN05ejaBv8KE8-It3EXiXfwbMeaq9fnI3l_b_vUa1RfwkVKANVw
-      email: maxime.dharboulle@gmail.com
+      token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYXhpbWUuZGhhcmJvdWxsZTExQGdtYWlsLmNvbSIsInJvbGUiOiJQQVJUTkVSIiwiaWQiOiI2MGU4MDU0Nzg2Y2ZiOTBhYjg1YjFmNmYiLCJpYXQiOjE2MjU4MjU4OTIsImV4cCI6MTYyNTgzMTI5Mn0.3FmsOw5S-h2jzwCYZY47Wew3vjkyLfiScDDzaydwrhbJrVVXqLBh4Yxm9dW5BwNHWR-4FDgl3BEIAtkfLnCdFA
+      email: maxime.dharboulle11@gmail.com
       password: password
-      id: 60e6414695f28e1f73dff8d9
-      partnerId: 60e6418995f28e1f73dff8db
-      timeslotId: 60e641a495f28e1f73dff8de
+      id: 60e8054786cfb90ab85b1f6f
+      partnerId: 60e8245086cfb90ab85b1f8d
+      timeslotId: 60e824be86cfb90ab85b1f8f
     dataPropertyOrder:
       "&":
         - url

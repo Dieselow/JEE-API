@@ -103,10 +103,10 @@ public class PartnerController {
         return new ResponseEntity<>(resultPartner, HttpStatus.CREATED);
     }
 
-    @GetMapping("{id}/timeslots")
-    public ResponseEntity<List<TimeSlot>> getAvailableTimeSlots(@PathVariable String id) {
+    @GetMapping("{partnerId}/timeslots/available")
+    public ResponseEntity<List<TimeSlot>> getAvailableTimeSlots(@PathVariable String partnerId) {
 
-        Optional<Partner> partner = partnerService.findById(id);
+        Optional<Partner> partner = partnerService.findById(partnerId);
         if (partner.isPresent()){
             List<TimeSlot> slots = partner
                     .get()
@@ -117,6 +117,17 @@ public class PartnerController {
             return new ResponseEntity<>(slots, HttpStatus.OK);
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "partner not found");
+    }
+
+    @GetMapping("{id}/timeslots")
+    public ResponseEntity<List<TimeSlot>> getTimeSlots(@PathVariable String id) {
+
+        Optional<Partner> partner = partnerService.findById(id);
+        if(!partner.isPresent()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "partner not found");
+        }
+
+        return new ResponseEntity<>(partner.get().getTimeSlots(), HttpStatus.OK);
     }
 
 
