@@ -57,12 +57,8 @@ public class AuthenticationController {
     public ResponseEntity<User> insertUser(@RequestBody User user) {
         User _userExist = userService.findUserByEmail(user.getEmail());
         if(_userExist == null) {
-            try {
-                User _user = userService.addUser(user);
-                return new ResponseEntity<>(_user, HttpStatus.CREATED);
-            } catch (Exception e) {
-                return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+            User _user = userService.addUser(user);
+            return new ResponseEntity<>(_user, HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(null, HttpStatus.CONFLICT);
         }

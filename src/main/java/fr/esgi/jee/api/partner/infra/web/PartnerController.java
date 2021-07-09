@@ -62,34 +62,45 @@ public class PartnerController {
     @PostMapping("{partnerId}/timeslots")
     public ResponseEntity<TimeSlot> addTimeSlot(@RequestHeader(value="Authorization") String token, @PathVariable String partnerId, @RequestBody TimeSlot timeslot) {
         User user = userService.getUserFromToken(token);
-        Optional<Partner> partner = partnerService.findById(partnerId);
-        if(!partner.isPresent()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "partner not found");
-        }
 
-        if(!user.getPartners().stream().anyMatch(p -> p.getId().equals(partner.get().getId()))){
+        if(!user.getPartners().stream().anyMatch(p -> p.getId().equals(partnerId))){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "you arn't the owner of this partner");
         }
 
-        if(timeslot.getStartDate() < new Date().getTime() / 1000){
+        if(timeslot.getStartDate() < System.currentTimeMillis() / 1000){
             throw new ResponseStatusException(HttpStatus.CONFLICT, "can't add a timeslot in the past");
         }
 
-        TimeSlot created = timeSlotService.createTimeSlot(timeslot, partnerId);
+        TimeSlot created = timeSlotService.createTimeSlot(timeslot);
+
+        List<TimeSlot> slots = new ArrayList<>();
+        slots.add(created);
+        partnerService.addTimeSlots(slots, partnerId);
+
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
     @PostMapping("{partnerId}/timeslots/range")
-    public ResponseEntity<List<TimeSlot>> addTimeSlotByRange(@RequestBody CreateTimeSlotRangeDTO createTimeSlotRangeDTO) {
+    public ResponseEntity<Partner> addTimeSlotByRange(@RequestHeader(value="Authorization") String token, @PathVariable String partnerId, @RequestBody CreateTimeSlotRangeDTO createTimeSlotRangeDTO) {
+        User user = userService.getUserFromToken(token);
 
+        if(!user.getPartners().stream().anyMatch(p -> p.getId().equals(partnerId))){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "you arn't the owner of this partner");
+        }
 
-        if(createTimeSlotRangeDTO.getStartDate() < System.currentTimeMillis()){
-
+        if(createTimeSlotRangeDTO.getStartDate() < System.currentTimeMillis() / 1000){
             throw new ResponseStatusException(HttpStatus.CONFLICT, "can't add a timeslot in the past");
         }
 
-        List<TimeSlot> createdSlots = timeSlotService.createTimeSlotByRange(createTimeSlotRangeDTO);
-        return new ResponseEntity<>(createdSlots, HttpStatus.CREATED);
+        List<TimeSlot> builtSlots = timeSlotService.buildTimeSlotByRange(createTimeSlotRangeDTO);
+        for(TimeSlot slot : builtSlots){
+            slot.setId(
+                    timeSlotService.createTimeSlot(slot).getId()
+            );
+        }
+        Partner resultPartner = partnerService.addTimeSlots(builtSlots, partnerId);
+
+        return new ResponseEntity<>(resultPartner, HttpStatus.CREATED);
     }
 
     @GetMapping("{id}/timeslots")
